@@ -40,7 +40,7 @@ def get_user_by_email(email):
 
     return User.query.filter(User.email == email).first()
 
-def create_event(user, title, description, start_time, end_time):
+def create_event(user, title, description, start_time, end_time, created_on, updated_on, deleted_on=None):
     """Create and return a new event"""
 
     event = Event(user=user, 
@@ -48,10 +48,18 @@ def create_event(user, title, description, start_time, end_time):
                   description=description, 
                   start_time=start_time, 
                   end_time=end_time,
-                  )
+                  created_on=created_on,
+                  updated_on=updated_on,
+                  deleted_on=deleted_on)
+
+    db.session.add(event)
+    db.session.commit()
     
     return event
     
+def get_event_by_id(event_id):
+    
+    return Event.query.get(event_id)
 
 
 

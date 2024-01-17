@@ -1,0 +1,23 @@
+{% extends 'base.html' %}
+{% block title %} New Event {% endblock %}
+{% block body %}
+
+<form action="/create-event" method="POST">
+    <p>
+        Title <input type="text" name="title">
+    </p>
+    <p>
+        Description <input type="string" name="description">
+    </p>
+    <p>
+        Start time <input type="time" name="start_time"> 
+    </p>
+    <p>
+        End time <input type="time" name="end_time"> 
+    </p>
+
+        <input type="submit">
+</form>
+
+ 
+{% endblock body %}

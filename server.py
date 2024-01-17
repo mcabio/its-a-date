@@ -5,6 +5,7 @@ from flask import (Flask, render_template, request, flash, session,
 from werkzeug.security import check_password_hash
 from passlib.hash import argon2
 from model import connect_to_db, db
+from datetime import datetime
 import crud
 
 from jinja2 import StrictUndefined
@@ -12,7 +13,7 @@ from jinja2 import StrictUndefined
 app = Flask(__name__)
 app.secret_key = 'secretkey'
 app.jinja_env.undefined = StrictUndefined
-app.config['SQLALCHEMY_POOL_RECYCLE'] = -1
+
 
 @app.route('/')
 def homepage():
@@ -105,6 +106,39 @@ def dashboard():
 
     # Pass the user data to the template
     return render_template('dashboard.html', user=user)
+
+
+@app.route('/create-event', methods=["POST", "GET"])
+def create_event():
+    """Create new event"""
+
+    if request.method == "GET":
+        return render_template('create-event.html')
+
+    # Assuming you have the current user's username in the session
+    username = session['current_user']
+    user = crud.get_user_by_username(username)
+
+    title = request.form.get("title")
+    description = request.form.get("description")
+    start_time_str = request.form.get("start_time")
+    end_time_str = request.form.get("end_time")
+    created_on = datetime.now()
+    updated_on = datetime.now()
+    deleted_on = None
+
+    # Combine the current date with the provided time
+    start_time = datetime.combine(datetime.today(), datetime.strptime(start_time_str, "%H:%M").time())
+    end_time = datetime.combine(datetime.today(), datetime.strptime(end_time_str, "%H:%M").time())
+
+    # Use the user instance when creating the event
+    event = crud.create_event(user, title, description, start_time, end_time, created_on, updated_on, deleted_on)
+
+    db.session.add(event)
+    db.session.commit()
+    flash("Success! Event added.")
+    return redirect('/dashboard')
+
 
 
 
