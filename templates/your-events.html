@@ -2,20 +2,15 @@
 {% block title %} It's A Date! {% endblock %}
 
 {% block body %}
-    <h1>Let's start scheming!</h1>
-
-    <a href="your-events" target="_blank">
-        <button>Go to your events!</button>
-    </a>
+    <h1>Your agenda!</h1>
 
     <meta charset='utf-8' />
     <script src="
     https://cdn.jsdelivr.net/npm/fullcalendar@6.1.10/index.global.min.js
     "></script>
-    
-    <script src='/static/js/dashboard.js'></script>
+    </script>
+    <script src='/static/js/yourEvents.js'></script>
 
     <div id='calendar'></div>
 
 {% endblock %}
-

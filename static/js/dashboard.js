@@ -1,60 +1,27 @@
-
-
-// document.addEventListener('DOMContentLoaded', function() {
-//     var calendarEl = document.getElementById('calendar');
-//     var selectedDate; // Variable to store the selected date
-
-//     var calendar = new FullCalendar.Calendar(calendarEl, {
-//         initialView: 'dayGridMonth',
-//         headerToolbar: {
-//             center: 'addEventButton'
-//         },
-//         customButtons: {
-//             addEventButton: {
-//                 text: 'add event...',
-//                 click: function() {
-//                     var dateStr = prompt('Enter a date in YYYY-MM-DD format');
-//                     var date = new Date(dateStr + 'T00:00:00'); // will be in local time
-
-//                     if (!isNaN(date.valueOf())) { // valid?
-//                         selectedDate = date; // Set the selected date
-//                         // Redirect to /create-event with the selected date
-//                         window.location.href = '/create-event?date=' + dateStr;
-//                     } else {
-//                         alert('Invalid date.');
-//                     }
-//                 }
-//             }
-//         }
-//     });
-
-//     calendar.render();
-
 document.addEventListener('DOMContentLoaded', function() {
     var calendarEl = document.getElementById('calendar');
-    var selectedDate;
+
     var calendar = new FullCalendar.Calendar(calendarEl, {
-        initialView: 'dayGridMonth',
-        headerToolbar: {
-          left: 'prev,next today',
-          center: 'title',
-          right: 'dayGridMonth,timeGridWeek,timeGridDay'
-        },
+        // Your FullCalendar configuration options...
         dateClick: function(info) {
-            selectedDate = info.date; // Set selectedDate to the clicked date
-            if (info.resource && info.resource.id) {
-                alert('clicked ' + info.dateStr + ' on resource ' + info.resource.id);
-            } else {
-                alert('clicked ' + info.dateStr + ' on no resource');
+            // Handle date clicks based on the view
+            switch (info.view.type) {
+                case 'dayGridMonth':
+                    // Month view - Redirect to a page to add an event for the selected day
+                    window.location.href = '/create-event?date=' + info.dateStr;
+                    break;
+                case 'timeGridWeek':
+                    // Week view - Redirect to a page to add an event for the selected day
+                    window.location.href = '/create-event?date=' + info.dateStr;
+                    break;
+                case 'timeGridDay':
+                    // Day view - Redirect to a page to add an event for the selected half-hour slot
+                    window.location.href = '/create-event?date=' + info.dateStr + '&time=' + info.date.getHours() + ':' + (info.date.getMinutes() < 30 ? '00' : '30');
+                    break;
+                default:
+                    // Handle other views as needed
             }
         },
-        select: function(info) {
-            if (info.resource && info.resource.id) {
-                alert('selected ' + info.startStr + ' to ' + info.endStr + ' on resource ' + info.resource.id);
-            } else {
-                alert('selected ' + info.startStr + ' to ' + info.endStr + ' on no resource');
-            }
-        }
     });
 
     calendar.render();
@@ -76,19 +43,13 @@ document.addEventListener('DOMContentLoaded', function() {
             var eventData = {
                 title: title,
                 description: description,
-                start: selectedDate.toISOString().slice(0, 10) + 'T' + startTime,
-                end: selectedDate.toISOString().slice(0, 10) + 'T' + endTime,
+                start: info.date,
+                end: info.date,
                 allDay: false
             };
 
-            console.log('selectedDate:', selectedDate);
-            console.log('startTime:', startTime);
-            console.log('endTime:', endTime);
-
             // Add the event to the calendar
             calendar.addEvent(eventData);
-
-            console.log(calendar.getEvents());
 
             // Optionally, you can clear the form or perform other actions
 
@@ -98,3 +59,7 @@ document.addEventListener('DOMContentLoaded', function() {
     }
 });
 
+function getUserIDFromSession() {
+    // Assuming you set the user ID in a global variable on the server side
+    return window.user_id;  // Replace with your actual logic to get user_id
+}

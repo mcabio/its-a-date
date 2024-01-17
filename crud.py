@@ -61,5 +61,9 @@ def get_event_by_id(event_id):
     
     return Event.query.get(event_id)
 
+def get_events_by_user_id(user_id):
+    """Get events based on user_id."""
+    events = Event.query.filter_by(user_id=user_id).all()
+    return events
 
 
