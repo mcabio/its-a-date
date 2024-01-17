@@ -52,7 +52,8 @@ def login():
 def register_user():
     """Create new user"""
 
-    if request.method == "GET":
+    if request.method == "GET": # This prevents a blank entry in the dashboard
+                                # before a new user is added.
         return render_template('new-user.html')
 
     email = request.form.get("email")
