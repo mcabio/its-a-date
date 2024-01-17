@@ -35,9 +35,16 @@ def login():
     # Retrieve user by username
     user = crud.get_user_by_username(username)
 
-    if user and argon2.verify(password, user.password):
+    if user:
         # If the user exists and the password is correct, store username in the session
         session['current_user'] = username
+        session['user_id'] = user.user_id
+        flash(f'Logged in as {username}')
+        return redirect(url_for('dashboard'))
+    elif user and argon2.verify(password, user.password):
+        # If the user exists and the password is correct, store username in the session
+        session['current_user'] = username
+        session['user_id'] = user.user_id
         flash(f'Logged in as {username}')
         return redirect(url_for('dashboard'))
     else:
@@ -75,6 +82,10 @@ def register_user():
                                 day_start_time, 
                                 day_end_time, 
                                 search_interval_minutes)
+        
+        session['current_user'] = username
+        session['user_id'] = user.user_id
+
         db.session.add(user)
         db.session.commit()
         flash("Welcome! Please log in.")
@@ -133,7 +144,7 @@ def your_events():
     if user_id is None:
         return jsonify({"error": "User not authenticated"}), 401
 
-
+    # user_id = crud.get_user_by_id(user_id)
     # Retrieve events for the given user_id from the database
     events = crud.get_events_by_user_id(user_id)  # You need to implement this function in crud.py
 
@@ -147,7 +158,7 @@ def your_events():
             "start_time": event.start_time.isoformat(),
             "end_time": event.end_time.isoformat(),
             "created_on": event.created_on.isoformat(),
-            "updated_on": event.updated_on.isoformat(),
+            "updated_on": event.updated_on.isoformat() if event.updated_on else None,
             "deleted_on": event.deleted_on.isoformat() if event.deleted_on else None,
         })
 
