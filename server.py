@@ -1,22 +1,49 @@
 """Server for calendar app."""
 
 from flask import (Flask, render_template, request, flash, session,
-                   redirect)
-
+                   redirect, url_for)
+from werkzeug.security import check_password_hash
+from passlib.hash import argon2
 from model import connect_to_db, db
 import crud
 
 from jinja2 import StrictUndefined
 
 app = Flask(__name__)
-app.secret_key = 'dev'
+app.secret_key = 'secretkey'
 app.jinja_env.undefined = StrictUndefined
+app.config['SQLALCHEMY_POOL_RECYCLE'] = -1
 
 @app.route('/')
 def homepage():
     """View homepage"""
 
     return render_template('homepage.html')
+
+
+
+@app.route('/login', methods=['POST', 'GET'])
+def login():
+    """Log user into application."""
+
+    if 'current_user' in session:
+        flash('You are already logged in.')
+        return redirect(url_for('dashboard'))
+    
+    username = request.form.get('username')
+    password = request.form.get('password')
+
+    # Retrieve user by username
+    user = crud.get_user_by_username(username)
+
+    if user and argon2.verify(password, user.password):
+        # If the user exists and the password is correct, store username in the session
+        session['current_user'] = username
+        flash(f'Logged in as {username}')
+        return redirect(url_for('dashboard'))
+    else:
+        flash('Wrong username or password!')
+        return redirect('/login')
 
 
 
@@ -28,7 +55,7 @@ def register_user():
         return render_template('new-user.html')
 
     email = request.form.get("email")
-    password = request.form.get("password")
+    password = request.form.get("password")  # Capture the password correctly
     username = request.form.get("username") 
     fname = request.form.get("first_name")  
     lname = request.form.get("last_name")
@@ -36,14 +63,16 @@ def register_user():
     day_end_time = request.form.get("day_end_time")
     search_interval_minutes = request.form.get("search_interval_minutes")
 
+    hashed_password = argon2.hash(password)  # Hash the password
+
     user = crud.get_user_by_email(email)
 
     if user:
         flash("Cannot create an account with that email. Try again")
-        return redirect('/new-user')
+        return render_template('new-user.html')
     else:
         user = crud.create_user(email, 
-                                password,  
+                                hashed_password,  # Use the hashed password
                                 username,
                                 fname, 
                                 lname, 
@@ -53,8 +82,29 @@ def register_user():
         db.session.add(user)
         db.session.commit()
         flash("Welcome! Please log in.")
-        # return redirect('new-user.html', user_id=user.user_id)
         return redirect('/')
+
+
+
+@app.route('/dashboard')
+def dashboard():
+    # Check if the user is authenticated
+    if 'current_user' not in session:
+        flash("Please log in to access the dashboard.")
+        return redirect('/')
+
+    username = session['current_user']
+
+    # Retrieve user by username
+    user = crud.get_user_by_username(username)
+
+    # Check if the user exists
+    if user is None:
+        flash("User not found.")
+        return redirect('/')
+
+    # Pass the user data to the template
+    return render_template('dashboard.html', user=user)
 
 
 

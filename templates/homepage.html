@@ -5,20 +5,22 @@
     <h1>Let's start scheming!</h1>    
 
     <h2>Log In</h2>
-    <form action="/dashboard" method="POST">
-        <p>
-           Email <input type="text" name="email"> 
-        </p>
-        <p>
-            Password <input type="text" name="password">
-        </p>
-        <p>
-            <input type="submit">
-        </p>
+    <form action="/login" method="POST">
+        <label>
+            Username:
+            <input type="text" id="username" name="username" automcomplete="username">
+        </label>
+    
+        <label>
+            Password:
+        <input type="password" id="password" name="password" autocomplete="current-password">
+        </label>
+        <input type="submit" value="Log In">
     </form>
     <h2>Navigation</h2>
     <ul>
         <li><a href="/new-user">New around here? Sign up!</a></li>
     </ul>
 {% endblock %}
+
 
