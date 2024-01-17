@@ -1,0 +1,36 @@
+{% extends 'base.html' %}
+{% block title %} New User {% endblock %}
+{% block body %}
+
+<form action="/new-user" method="POST">
+    <p>
+        E-mail <input type="text" name="email">
+    </p>
+    <p>
+        Password <input type="text" name="password">
+    </p>
+    <p>
+        Pick a username <input type="text" name="username"> 
+    </p>
+    <p>
+        First name <input type="text" name="first_name"> 
+    </p>
+    <p>
+        Last name <input type="text" name="last_name">
+    </p>
+    <p>
+        What time does your day start? <input type="time" name="day_start_time">
+    </p>
+    <p>
+        What time does your day end? <input type="time" name="day_end_time">
+    </p>
+    <p>
+        When you search for events on your calendar, how many minutes do you want to see in between intervals? 
+        <input type="number" name="search_interval_minutes">
+    </p>
+    <p>
+        <input type="submit">
+</form>
+
+ 
+{% endblock body %}

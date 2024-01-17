@@ -1,0 +1,31 @@
+
+{% extends 'base.html' %}
+{% block title %} It's A Date! {% endblock %}
+
+{% block head %}
+    <!-- Include Google Identity Services Library -->
+    <script src="https://accounts.google.com/gsi/client" async defer></script>
+{% endblock %}
+
+{% block body %}
+    <h1>Let's start scheming!</h1>
+
+
+<div id="g_id_onload"
+     data-client_id='1034686939751-6acjjdb1p3tovcie8hep5hift7dcbark.apps.googleusercontent.com'
+     data-context="signin"
+     data-ux_mode="redirect"
+     data-login_uri="http://localhost:5000/google/callback"
+     data-auto_prompt="false">
+</div>
+
+<div class="g_id_signin"
+     data-type="standard"
+     data-shape="pill"
+     data-theme="filled_black"
+     data-text="signin_with"
+     data-size="large"
+     data-logo_alignment="left">
+</div>
+{% endblock %}
+

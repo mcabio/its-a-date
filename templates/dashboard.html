@@ -1,0 +1,16 @@
+{% extends 'base.html' %}
+{% block title %} It's A Date! {% endblock %}
+
+{% block body %}
+    <h1>Let's start scheming!</h1>
+
+    <script src="https://accounts.google.com/gsi/client" async defer></script>
+    <script src="/static/js/dashboard.js"></script>
+
+    {% if calendar_data %}
+        <h2>Calendar Information</h2>
+        <pre>{{ calendar_data | tojson(indent=2) }}</pre>
+    {% else %}
+        <p>No calendar data available.</p>
+    {% endif %}
+{% endblock %}
