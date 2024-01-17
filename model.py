@@ -31,7 +31,6 @@ class User(db.Model):
     lname = db.Column(db.String(50))
     day_start_time = db.Column(db.Time)
     day_end_time = db.Column(db.Time)
-    search_interval_minutes = db.Column(db.Integer, default=30)
 
     events = db.relationship('Event', back_populates='user')
 

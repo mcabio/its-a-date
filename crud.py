@@ -3,7 +3,7 @@ from model import db, User, Event, Notification, RecurringPattern, connect_to_db
 from sqlalchemy.exc import IntegrityError
 
 
-def create_user(email, password, username, fname, lname, day_start_time, day_end_time, search_interval_minutes):
+def create_user(email, password, username, fname, lname, day_start_time, day_end_time):
     """Create and return a new user."""
     
     user = User(email=email, 
@@ -12,8 +12,7 @@ def create_user(email, password, username, fname, lname, day_start_time, day_end
                 fname=fname, 
                 lname=lname, 
                 day_start_time=day_start_time, 
-                day_end_time=day_end_time, 
-                search_interval_minutes=search_interval_minutes)
+                day_end_time=day_end_time)
     
     db.session.add(user)
 
