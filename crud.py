@@ -39,12 +39,13 @@ def get_user_by_email(email):
 
     return User.query.filter(User.email == email).first()
 
-def create_event(user, title, description, start_time, end_time, created_on, updated_on, deleted_on=None):
+def create_event(user, title, description, date, start_time, end_time, created_on, updated_on, deleted_on=None):
     """Create and return a new event"""
 
     event = Event(user=user, 
                   title=title, 
                   description=description, 
+                  date=date,
                   start_time=start_time, 
                   end_time=end_time,
                   created_on=created_on,

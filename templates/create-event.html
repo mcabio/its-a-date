@@ -10,10 +10,10 @@
         Description <input type="string" name="description">
     </p>
     <p>
-        Date <input type="date" name="date" value="{{ request.args.get('date') }}">
+        Date <input type="text" name="date" value="{{ request.args.get('date') }}">
     </p>
     <p>
-        Start time <input type="time" name="start_time"> 
+        Start time <input type="time" name="start_time" value="{{ request.args.get('time') | default('00:00') }}">
     </p>
     <p>
         End time <input type="time" name="end_time"> 

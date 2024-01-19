@@ -1,8 +1,48 @@
+function getUserIDFromSession() {
+    // Assuming you set the user ID in a global variable on the server side
+    return window.user_id;  // Replace with your actual logic to get user_id
+}
+
 document.addEventListener('DOMContentLoaded', function() {
     var calendarEl = document.getElementById('calendar');
-
     var calendar = new FullCalendar.Calendar(calendarEl, {
-        // Your FullCalendar configuration options...
+        initialView: 'dayGridMonth',
+        headerToolbar: {
+            left: 'prev,next today',
+            center: 'title',
+            right: 'dayGridMonth,timeGridWeek,timeGridDay'
+        },
+        events: function(info, successCallback, failureCallback) {
+            // Fetch events from the server based on the current view
+            var user_id = getUserIDFromSession();  // Get user ID from the session or your preferred method
+
+            var url = '/publish-event';
+
+            fetch(url, {
+                method: 'GET',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data && data.events) {
+                    // Process the received data and pass it to FullCalendar
+                    var eventsData = data.events.map(event => ({
+                        title: event.title,
+                        description: event.description,
+                        start: event.date + (event.start_time ? 'T' + event.start_time : ''),
+                        end: event.date + (event.end_time ? 'T' + event.end_time : ''),
+                        allDay: false
+                    }));
+            
+                    successCallback(eventsData);  // Pass the events data to FullCalendar
+                } else {
+                    console.error('Received data or events array is undefined.');
+                    failureCallback('Received data or events array is undefined.');  // Pass an error to FullCalendar
+                }
+            });
+        },
         dateClick: function(info) {
             // Handle date clicks based on the view
             switch (info.view.type) {
@@ -12,7 +52,7 @@ document.addEventListener('DOMContentLoaded', function() {
                     break;
                 case 'timeGridWeek':
                     // Week view - Redirect to a page to add an event for the selected day
-                    window.location.href = '/create-event?date=' + info.dateStr;
+                    window.location.href = '/create-event?date=' + info.dateStr + '&time=' + info.date.getHours() + ':' + (info.date.getMinutes() < 30 ? '00' : '30');
                     break;
                 case 'timeGridDay':
                     // Day view - Redirect to a page to add an event for the selected half-hour slot
@@ -25,41 +65,4 @@ document.addEventListener('DOMContentLoaded', function() {
     });
 
     calendar.render();
-
-    // Handle form submission
-    var form = document.querySelector('form');
-    if (form) {
-        form.addEventListener('submit', function(event) {
-            event.preventDefault(); // Prevent the form from submitting traditionally
-
-            // Collect form data
-            var formData = new FormData(form);
-            var title = formData.get('title');
-            var description = formData.get('description');
-            var startTime = formData.get('start_time');
-            var endTime = formData.get('end_time');
-
-            // Construct FullCalendar event data
-            var eventData = {
-                title: title,
-                description: description,
-                start: info.date,
-                end: info.date,
-                allDay: false
-            };
-
-            // Add the event to the calendar
-            calendar.addEvent(eventData);
-
-            // Optionally, you can clear the form or perform other actions
-
-            // Reset the form
-            form.reset();
-        });
-    }
 });
-
-function getUserIDFromSession() {
-    // Assuming you set the user ID in a global variable on the server side
-    return window.user_id;  // Replace with your actual logic to get user_id
-}

@@ -4,8 +4,9 @@ from flask import (Flask, jsonify, render_template, request, flash, session,
                    redirect, url_for)
 from werkzeug.security import check_password_hash
 from passlib.hash import argon2
-from model import connect_to_db, db
-from datetime import datetime
+from model import connect_to_db, db, Event
+from datetime import date, datetime, timedelta
+from sqlalchemy import func
 import crud
 
 from jinja2 import StrictUndefined
@@ -64,7 +65,6 @@ def register_user():
     lname = request.form.get("last_name")
     day_start_time = request.form.get("day_start_time")
     day_end_time = request.form.get("day_end_time")
-    search_interval_minutes = request.form.get("search_interval_minutes")
 
     hashed_password = argon2.hash(password)
 
@@ -80,8 +80,7 @@ def register_user():
                                 fname, 
                                 lname, 
                                 day_start_time, 
-                                day_end_time, 
-                                search_interval_minutes)
+                                day_end_time)
         
         session['current_user'] = username
         session['user_id'] = user.user_id
@@ -109,34 +108,6 @@ def dashboard():
     # Pass the user data to the template
     return render_template('dashboard.html', user=user)
 
-@app.route('/create-event', methods=["POST", "GET"])
-def create_event():
-    """Create new event"""
-    if request.method == "GET":
-        return render_template('create-event.html')
-
-    username = session['current_user']
-    user = crud.get_user_by_username(username)
-
-    title = request.form.get("title")
-    description = request.form.get("description")
-    start_time_str = request.form.get("start_time")
-    end_time_str = request.form.get("end_time")
-    created_on = datetime.now()
-    updated_on = datetime.now()
-    deleted_on = None
-
-    start_time = datetime.combine(datetime.today(), datetime.strptime(start_time_str, "%H:%M").time())
-    end_time = datetime.combine(datetime.today(), datetime.strptime(end_time_str, "%H:%M").time())
-
-    event = crud.create_event(user, title, description, start_time, end_time, created_on, updated_on, deleted_on)
-
-    db.session.add(event)
-    db.session.commit()
-    flash("Success! Event added.")
-    return redirect('/dashboard')
-
-
 @app.route('/your-events', methods=["GET", "POST"])
 def your_events():
     # Assuming you have the user_id in the session
@@ -155,6 +126,7 @@ def your_events():
             "event_id": event.event_id,
             "title": event.title,
             "description": event.description,
+            "date": event.date,
             "start_time": event.start_time.isoformat(),
             "end_time": event.end_time.isoformat(),
             "created_on": event.created_on.isoformat(),
@@ -162,12 +134,93 @@ def your_events():
             "deleted_on": event.deleted_on.isoformat() if event.deleted_on else None,
         })
 
-    # Prepare the response data
     response_data = {"events": events_data}
 
     return jsonify(response_data)
 
+@app.route('/create-event', methods=["POST", "GET"])
+def create_event():
+    """Create new event"""
+    if request.method == "GET":
+        return render_template('create-event.html')
 
+    username = session['current_user']
+    user = crud.get_user_by_username(username)
+
+    title = request.form.get("title")
+    description = request.form.get("description")
+    date_str = request.form.get("date")
+    start_time_str = request.form.get("start_time")
+    end_time_str = request.form.get("end_time")
+    created_on = datetime.now()
+    updated_on = datetime.now()
+    deleted_on = None
+
+    # Convert date string to datetime object
+    date = datetime.strptime(date_str, "%Y-%m-%d").date()
+
+    start_time = datetime.combine(date, datetime.strptime(start_time_str, "%H:%M").time())
+    end_time = datetime.combine(date, datetime.strptime(end_time_str, "%H:%M").time())
+
+    event = crud.create_event(user, title, description, date, start_time, end_time, created_on, updated_on, deleted_on)
+
+    # Prepare the response data
+    response_data = {
+        "event_id": event.event_id,
+        "title": event.title,
+        "description": event.description,
+        "date": event.date,
+        "start_time": event.start_time.isoformat(),
+        "end_time": event.end_time.isoformat(),
+        # "created_on": event.created_on.isoformat(),
+        # "updated_on": event.updated_on.isoformat() if event.updated_on else None,
+        # "deleted_on": event.deleted_on.isoformat() if event.deleted_on else None,
+    }
+
+    db.session.add(event)
+    db.session.commit()
+    flash("Success! Event added.")
+    
+    return redirect('/dashboard')
+
+@app.route('/publish-event', methods=["GET"])
+def publish_event():
+    """Publish events onto the calendar for the user in session."""
+    
+    # Get user_id from the session
+    user_id = session.get('user_id')
+
+    if user_id is None:
+        return jsonify({'error': 'User not logged in'}), 401
+
+    # Get the current date and time
+    current_datetime = datetime.now()
+
+    # Calculate the start and end date of the current month
+    start_date = current_datetime.replace(day=1, hour=0, minute=0, second=0, microsecond=0)
+    end_date = (start_date + timedelta(days=32)).replace(day=1, microsecond=0)  # Assume a maximum of 31 days in a month
+
+    # Query the database for events within the specified month and user_id
+    events = Event.query.filter(
+        Event.user_id == user_id,
+        func.extract('month', Event.date) == start_date.month,
+        func.extract('year', Event.date) == start_date.year
+    ).all()
+
+    # Convert events to a list of dictionaries containing the required information
+    events_data = []
+    for event in events:
+        events_data.append({
+            'title': event.title,
+            'description': event.description,
+            'date': event.date.strftime('%Y-%m-%d'),
+            'start_time': event.start_time.strftime('%H:%M:%S') if event.start_time else None,
+            'end_time': event.end_time.strftime('%H:%M:%S') if event.end_time else None,
+        })
+
+    # Return the events data as JSON
+    response_data = {'events': events_data} if events_data else {'events': []}
+    return jsonify(response_data)
 
 
 if __name__ == "__main__":
