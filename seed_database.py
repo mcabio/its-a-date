@@ -65,7 +65,7 @@ def seed_users_and_events():
 
     event2 = crud.create_event(user2, title='When two becomes 1', 
                                description='Spice girls',
-                               date=date(2024, 2, 14),
+                               date=date(2024, 1, 14),
                                start_time = time(10, 8, 0), 
                                end_time=time(11, 30, 0),
                                created_on=created_on,
@@ -124,7 +124,7 @@ def seed_users_and_events():
                                deleted_on=deleted_on)
     event9 = crud.create_event(user2, title='Cloud 9', 
                                description='Description 4',
-                               date=date(2024, 10, 27),
+                               date=date(2024, 1, 27),
                                start_time = time(7, 30, 0), 
                                end_time=time(18, 30, 0),
                                created_on=created_on,
@@ -132,7 +132,7 @@ def seed_users_and_events():
                                deleted_on=deleted_on)
     event10 = crud.create_event(user2, title='Rin ten ten', 
                                 description='A detective',
-                                date=date(2024, 10, 31),
+                                date=date(2024, 1, 31),
                                start_time = time(7, 30, 0), 
                                end_time=time(18, 30, 0),
                                created_on=created_on,

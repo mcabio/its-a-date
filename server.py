@@ -1,6 +1,6 @@
 """Server for calendar app."""
 
-from flask import (Flask, jsonify, render_template, request, flash, session,
+from flask import (Flask, jsonify, render_template, request, abort, flash, session,
                    redirect, url_for)
 from werkzeug.security import check_password_hash
 from passlib.hash import argon2
@@ -193,18 +193,25 @@ def publish_event():
     if user_id is None:
         return jsonify({'error': 'User not logged in'}), 401
 
-    # Get the current date and time
-    current_datetime = datetime.now()
+    # Get the start and end dates from the request parameters
+    start_str = request.args.get('start')
+    end_str = request.args.get('end')
 
-    # Calculate the start and end date of the current month
-    start_date = current_datetime.replace(day=1, hour=0, minute=0, second=0, microsecond=0)
-    end_date = (start_date + timedelta(days=32)).replace(day=1, microsecond=0)  # Assume a maximum of 31 days in a month
+    print(f"Received request. Start: {start_str}, End: {end_str}")
 
-    # Query the database for events within the specified month and user_id
+    if start_str is None or end_str is None:
+        return abort(400, 'Missing start or end parameter')  # Bad Request
+
+    try:
+        start_date = datetime.fromisoformat(start_str)
+        end_date = datetime.fromisoformat(end_str)
+    except ValueError:
+        return abort(400, 'Invalid date format')  # Bad Request
+
+    # Query the database for events within the specified start and end dates and user_id
     events = Event.query.filter(
         Event.user_id == user_id,
-        func.extract('month', Event.date) == start_date.month,
-        func.extract('year', Event.date) == start_date.year
+        Event.date.between(start_date.date(), end_date.date())
     ).all()
 
     # Convert events to a list of dictionaries containing the required information

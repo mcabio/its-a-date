@@ -1,7 +1,7 @@
-function getUserIDFromSession() {
-    // Assuming you set the user ID in a global variable on the server side
-    return window.user_id;  // Replace with your actual logic to get user_id
-}
+// function getUserIDFromSession() {
+//     // Assuming you set the user ID in a global variable on the server side
+//     return window.user_id;  // Replace with your actual logic to get user_id
+// }
 
 document.addEventListener('DOMContentLoaded', function() {
     var calendarEl = document.getElementById('calendar');
@@ -14,9 +14,12 @@ document.addEventListener('DOMContentLoaded', function() {
         },
         events: function(info, successCallback, failureCallback) {
             // Fetch events from the server based on the current view
-            var user_id = getUserIDFromSession();  // Get user ID from the session or your preferred method
-
-            var url = '/publish-event';
+            // var user_id = getUserIDFromSession();  // Get user ID from the session or your preferred method
+            console.log(info)
+            const start = info.startStr;
+            const end = info.endStr;
+            const searchParams = new URLSearchParams({start, end})
+            const url = '/publish-event?' + searchParams.toString()
 
             fetch(url, {
                 method: 'GET',
