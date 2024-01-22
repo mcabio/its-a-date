@@ -1,15 +1,63 @@
-/* CSS for list view */
+body {
+  margin: 0;
+  font-family: var(--bs-body-font-family);
+  font-size: var(--bs-body-font-size);
+  font-weight: var(--bs-body-font-weight);
+  line-height: var(--bs-body-line-height);
+  color: black
+  text-align: var(--bs-body-text-align);
+}
+
+/* CSS for calendar */
 
 html, body {
     margin: 0;
     padding: 0;
     font-family: Arial, Helvetica Neue, Helvetica, sans-serif;
     font-size: 14px;
+    color: white
+  }
+
+  .fc-list-event-time {
+    display: none;
+  }
+  .fc-h-event .fc-event-title {
+    font-size: 11px;
+  }
+  .calendar-container {
+    padding-top: 10px;
+    justify-content: center;
+    height: calc(100vh - 190px);
+  }
+  #calendar a {
+    color: gray;
+  }
+  #calendar .fc-button-primary {
+    background-color: rgb(232, 25, 243);
+    border: 1px solid dimgray;
+  }
+  #calendar .fc-button-primary:hover {
+    background-color: rgb(48,48,48);
+    border: 1px solid rgb(48,48,48);
+  }
+  .modal-body {
+    text-align: center;
+  }
+  .btn-sm {
+    margin: .125rem;
+  }
+  .modal-up {
+    border-color: rgb(178, 9, 164);
+    font-size: 1rem;
+  }
+  .modal-down {
+    border-color: white;
+    font-size: 1rem;
   }
   
   #calendar {
-    max-width: 600px;
-    margin: 30px auto;
+    max-width: 800px;
+    margin: 10px auto;
     color: black;
   }
 .create-event {
@@ -36,12 +84,12 @@ html, body {
 
   /* Font color of calendar month view */
   #calendar a {
-    color: rgb(207, 12, 12);
+    color: rgb(12, 2, 2);
   }
 
   /* Button color  */
   #calendar .fc-button-primary {
-    background-color: rgba(143, 48, 21, 0.342);
+    background-color: rgba(84, 41, 185, 0.74);
     border: 1px solid rgb(6, 6, 1);
   }
 
@@ -72,3 +120,11 @@ html, body {
       @include transition($transition-collapse-width);
     }
   }
+
+  .btn-primary {
+    background-color: #e01010; /* Red background for primary buttons */
+}
+
+  .btn-secondary {
+  background-color: indigo; /* Red background for primary buttons */
+}

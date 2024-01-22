@@ -28,6 +28,7 @@ document.addEventListener('DOMContentLoaded', function() {
                     var eventsData = data.events.map(event => ({
                         title: event.title,
                         description: event.description,
+                        date: event.date,
                         start: event.date + (event.start_time ? 'T' + event.start_time : ''),
                         end: event.date + (event.end_time ? 'T' + event.end_time : ''),
                         allDay: false

@@ -23,12 +23,13 @@ def homepage():
     """View homepage"""
     return render_template('homepage.html')
 
+
 @app.route('/login', methods=['POST', 'GET'])
 def login():
     """Log user into the application."""
     if 'current_user' in session:
         flash('You are already logged in.')
-        return redirect(url_for('dashboard'))
+        return redirect('/dashboard')
     
     username = request.form.get('username')
     password = request.form.get('password')
@@ -40,17 +41,20 @@ def login():
         # If the user exists and the password is correct, store username in the session
         session['current_user'] = username
         session['user_id'] = user.user_id
-        flash(f'Logged in as {username}')
+        flash(f'Nice to see you again {username}!')
         return redirect(url_for('dashboard'))
+
     elif user and argon2.verify(password, user.password):
         # If the user exists and the password is correct, store username in the session
         session['current_user'] = username
         session['user_id'] = user.user_id
         flash(f'Logged in as {username}')
-        return redirect(url_for('dashboard'))
+        return redirect('/dashboard')
     else:
-        flash('Wrong username or password!')
-        return redirect('/login')
+        flash('Username or password incorrect, please try again.')
+        return render_template('homepage.html')  # Render the login page instead of redirecting
+
+
 
 @app.route('/new-user', methods=["GET", "POST"])
 def register_user():
