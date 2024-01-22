@@ -6,7 +6,7 @@ document.addEventListener('DOMContentLoaded', function() {
         headerToolbar: {
             left: 'prev,next today',
             center: 'title',
-            right: 'dayGridMonth,timeGridWeek,timeGridDay'
+            right: 'dayGridMonth,timeGridWeek,timeGridDay,listMonth'
         },
         events: function(info, successCallback, failureCallback) {
             // Fetch events from the server based on the current view

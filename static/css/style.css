@@ -8,8 +8,9 @@ html, body {
   }
   
   #calendar {
-    max-width: 800px;
-    margin: 40px auto;
+    max-width: 600px;
+    margin: 30px auto;
+    color: black;
   }
 .create-event {
     color: white;
