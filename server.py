@@ -108,6 +108,7 @@ def dashboard():
     # Pass the user data to the template
     return render_template('dashboard.html', user=user)
 
+
 @app.route('/your-events', methods=["GET", "POST"])
 def your_events():
     # Assuming you have the user_id in the session
@@ -115,28 +116,35 @@ def your_events():
     if user_id is None:
         return jsonify({"error": "User not authenticated"}), 401
 
-    # user_id = crud.get_user_by_id(user_id)
-    # Retrieve events for the given user_id from the database
-    events = crud.get_events_by_user_id(user_id)  # You need to implement this function in crud.py
+    try:
+        events = crud.get_events_by_user_id(user_id)  
 
-    # Convert events to a list of dictionaries
-    events_data = []
-    for event in events:
-        events_data.append({
-            "event_id": event.event_id,
-            "title": event.title,
-            "description": event.description,
-            "date": event.date,
-            "start_time": event.start_time.isoformat(),
-            "end_time": event.end_time.isoformat(),
-            "created_on": event.created_on.isoformat(),
-            "updated_on": event.updated_on.isoformat() if event.updated_on else None,
-            "deleted_on": event.deleted_on.isoformat() if event.deleted_on else None,
-        })
 
-    response_data = {"events": events_data}
+        # Convert events to a list of dictionaries
+        events_data = []
+        for event in events:
+            events_data.append({
+                "event_id": event.event_id,
+                "title": event.title,
+                "description": event.description,
+                "date": event.date.strftime('%Y-%m-%d'),
+                "start_time": event.start_time.strftime('%H:%M:%S') if event.start_time else None,
+                "end_time": event.end_time.strftime('%H:%M:%S') if event.end_time else None,
+            })
 
-    return jsonify(response_data)
+        # response_data = {"events": events_data}
+        # print(response_data)
+    #     return jsonify(response_data)
+    except Exception as e:
+        print("Error:", str(e))
+        # return jsonify({"error": str(e)}), 500
+    return render_template('your-events.html', events_data=events_data)
+
+    #     return render_template('your-events.html', events_data=response_data)
+    # except Exception as e:
+    #     print("Error:", str(e))
+    #     return jsonify({"error": str(e)}), 500
+
 
 @app.route('/create-event', methods=["POST", "GET"])
 def create_event():
@@ -159,12 +167,13 @@ def create_event():
     # Convert date string to datetime object
     date = datetime.strptime(date_str, "%Y-%m-%d").date()
 
+    # this will combine the date and the time to create a start time and end time
     start_time = datetime.combine(date, datetime.strptime(start_time_str, "%H:%M").time())
     end_time = datetime.combine(date, datetime.strptime(end_time_str, "%H:%M").time())
 
     event = crud.create_event(user, title, description, date, start_time, end_time, created_on, updated_on, deleted_on)
 
-    # Prepare the response data
+    # This will prepare the datay for the json file.
     response_data = {
         "event_id": event.event_id,
         "title": event.title,

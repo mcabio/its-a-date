@@ -4,18 +4,39 @@
 {% block body %}
     <h1>Let's start scheming!</h1>
 
-    <a href="your-events" target="_blank">
+    <!-- <a href="your-events" target="_blank">
         <button>Go to your events!</button>
     </a>
+    <a href="/your-events" class="btn btn-primary">View Your Events</a> -->
+    <p class="d-inline-flex gap-1">
+    <button class="btn btn-primary" 
+            type="button" 
+            data-bs-toggle="collapse" 
+            data-bs-target="#eventsCollapse" 
+            aria-expanded="true" 
+            aria-controls="eventsCollapse">
+        Go to your events
+      </button>
+    </p>
+    <div class="collapse" id="eventsCollapse">
+        <div class="card card-body">
+          Some placeholder content for the collapse component. This panel is hidden by default but revealed when the user activates the relevant trigger.
+        </div>
+      </div>
+    <form id="form"> 
+        <input type="search events..." id="query" name="q" placeholder="Search...">
+        <button>search</button>
+    </form>
 
+    <div id='calendar'></div>
     <meta charset='utf-8' />
     <script src="
     https://cdn.jsdelivr.net/npm/fullcalendar@6.1.10/index.global.min.js
     "></script>
     
     <script src='/static/js/dashboard.js'></script>
-
-    <div id='calendar'></div>
+    <!-- <script src="/static/js/yourEvents.js"></script> -->
+    
 
 {% endblock %}
 
