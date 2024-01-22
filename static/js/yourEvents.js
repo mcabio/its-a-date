@@ -2,11 +2,19 @@ document.addEventListener('DOMContentLoaded', function () {
     // Function to fetch events from the server
     function fetchEvents() {
         return fetch('/your-events')
-            .then(response => response.json())
+            .then(response => {
+                if (!response.ok) {
+                    throw new Error(`HTTP error! Status: ${response.status}`);
+                }
+                return response.json();
+            })
             .then(data => {
-                const collapse = document.getElementById('eventsCollapse');
-            console.log(data)
-            
+                if (data && data.events) {
+                    // Process the received data and create the collapsible list
+                    createCollapsibleList(data.events);
+                } else {
+                    console.error('Received data or events array is undefined.');
+                }
             })
             .catch(error => console.error('Error fetching events:', error));
     }
@@ -14,8 +22,6 @@ document.addEventListener('DOMContentLoaded', function () {
     // Function to create the collapsible list
     function createCollapsibleList(events) {
         const collapse = document.getElementById('eventsCollapse');
-
-        // Group events by month
         const eventsByMonth = groupEventsByMonth(events);
 
         // Iterate over months and create collapsible items
@@ -49,7 +55,10 @@ document.addEventListener('DOMContentLoaded', function () {
             // Iterate over events in the month and create event items
             for (const event of monthEvents) {
                 const eventItem = document.createElement('div');
-                eventItem.innerHTML = `<a href="#" class="event-link">${event.title}</a>`;
+                eventItem.innerHTML = `<p>${event.title}</p>
+                                       <p>Date: ${event.date}</p>
+                                       <p>Start Time: ${event.start_time}</p>
+                                       <p>End Time: ${event.end_time}</p>`;
                 monthBody.appendChild(eventItem);
             }
 
@@ -74,16 +83,5 @@ document.addEventListener('DOMContentLoaded', function () {
     }
 
     // Fetch events when the page is loaded
-    fetchEvents()
-        .then(data => {
-            if (data && data.events) {
-                // Process the received data and create the collapsible list
-                createCollapsibleList(data.events);
-            } else {
-                console.error('Received data or events array is undefined.');
-            }
-        });
+    fetchEvents();
 });
-
-  
-  

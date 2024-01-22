@@ -105,20 +105,29 @@ def dashboard():
         flash("User not found.")
         return redirect('/')
 
-    # Pass the user data to the template
-    return render_template('dashboard.html', user=user)
+    # Query for dashboard events (excluding deleted events)
+    dashboard_events = Event.query.filter(
+        Event.user_id == user.user_id,
+        Event.deleted_on.is_(None)
+    ).all()
+
+    # Pass the user and events data to the template
+    return render_template('dashboard.html', user=user, dashboard_events=dashboard_events)
 
 
 @app.route('/your-events', methods=["GET", "POST"])
 def your_events():
     # Assuming you have the user_id in the session
     user_id = session.get('user_id')
+    
     if user_id is None:
         return jsonify({"error": "User not authenticated"}), 401
 
     try:
         events = crud.get_events_by_user_id(user_id)  
 
+        # Filter out deleted events
+        events = [event for event in events if event.deleted_on is None]
 
         # Convert events to a list of dictionaries
         events_data = []
@@ -133,12 +142,10 @@ def your_events():
                 "end_time": event.end_time.strftime('%I:%M %p') if event.end_time else None,
             })
 
-        # response_data = {"events": events_data}
-        # print(response_data)
-    #     return jsonify(response_data)
     except Exception as e:
         print("Error:", str(e))
         # return jsonify({"error": str(e)}), 500
+
     return render_template('your-events.html', events_data=events_data)
 
 
@@ -218,8 +225,11 @@ def publish_event():
     # Query the database for events within the specified start and end dates and user_id
     events = Event.query.filter(
         Event.user_id == user_id,
-        Event.date.between(start_date.date(), end_date.date())
+        Event.date.between(start_date.date(), end_date.date()),
+        Event.deleted_on == None
     ).all()
+
+    # events = [event for event in events if event.deleted_on is None]
 
     # Convert events to a list of dictionaries containing the required information
     events_data = []
@@ -235,6 +245,84 @@ def publish_event():
     # Return the events data as JSON
     response_data = {'events': events_data} if events_data else {'events': []}
     return jsonify(response_data)
+
+
+@app.route('/edit-event/<int:event_id>', methods=['POST', 'GET'])
+def edit_event(event_id):
+    """Update the event details."""
+    # Retrieve the event from the database
+    event = Event.query.get(event_id)
+
+    # Check if the event exists
+    if event is None:
+        flash("Event not found.")
+        return redirect('/your-events')
+
+    if request.method == "GET":
+        # Convert date and times to string for rendering in the form
+        event_date = event.date.strftime('%Y-%m-%d') if event.date else ''
+        start_time = event.start_time.strftime('%H:%M') if event.start_time else ''
+        end_time = event.end_time.strftime('%H:%M') if event.end_time else ''
+
+        # Pass the event details to the template context
+        return render_template('edit-event.html', event=event, event_date=event_date, start_time=start_time, end_time=end_time)
+    
+    # Process form submission (POST request)
+    try:
+        event.title = request.form.get('title')
+        event.description = request.form.get('description')
+
+        # Update date if provided
+        date_str = request.form.get('date')
+        if date_str:
+            event.date = datetime.strptime(date_str, "%Y-%m-%d").date()
+
+        # Update start time if provided
+        start_time_str = request.form.get('start_time')
+        if start_time_str:
+            event.start_time = datetime.strptime(start_time_str, "%H:%M").time()
+
+        # Update end time if provided
+        end_time_str = request.form.get('end_time')
+        if end_time_str:
+            event.end_time = datetime.strptime(end_time_str, "%H:%M").time()
+    except ValueError as e:
+        flash(f"Error updating event: {str(e)}")
+        return redirect('/your-events')
+
+    # Update the updated_on field with the current date and time
+    event.updated_on = datetime.now()
+
+    # Save the changes to the database
+    db.session.commit()
+
+    flash('Event updated successfully.')
+    return redirect('/your-events')
+
+
+@app.route('/delete-event/<int:event_id>', methods=['POST', 'GET'])
+def delete_event(event_id):
+    """Delete the event."""
+    # Retrieve the event from the database
+    event = Event.query.get(event_id)
+
+    # Check if the event exists
+    if event is None:
+        flash("Event not found.")
+        return redirect('/your-events')
+
+    # Update the deleted_on field with the current date and time
+    event.updated_on = datetime.now()
+    event.deleted_on = datetime.now()
+
+    # Save the changes to the database
+    db.session.commit()
+
+    flash('Event deleted successfully.')
+    return redirect('/your-events')
+
+
+
 
 @app.route('/logout', methods=['GET'])
 def logout():

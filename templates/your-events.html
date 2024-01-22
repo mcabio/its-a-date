@@ -5,8 +5,10 @@
 {% block body %}
     <h1>Your agenda!</h1>
 
+    {% set sorted_events_data = events_data|sort(attribute='date') %}
     {% set rendered_months = [] %}
-    {% for data in events_data %}
+
+    {% for data in sorted_events_data %}
         {% if data.month not in rendered_months %}
             <p class="d-inline-flex gap-1">
                 <a class="btn btn-primary" 
@@ -25,20 +27,22 @@
             <div class="col">
                 <div class="collapse multi-collapse" id="multiCollapse{{data.month}}">
                     <div class="card card-body">
+                        Event: {{data.title}}<br>
                         Date: {{data.date}}<br>
                         Description: {{data.description}}<br>
                         Start time: {{data.start_time}}<br>
-                        End time: {{data.end_time}}
+                        End time: {{data.end_time}}<br>
+                       
+                        <!-- Edit and delete buttons -->
+                        <a class="btn btn-secondary" href="/edit-event/{{ data.event_id }}" role="button">Edit</a>
+                        <a class="btn btn-danger" href="/delete-event/{{ data.event_id }}" role="button">Delete</a>
                     </div>
                 </div>
             </div>
         </div>
         
     {% endfor %}
-
-
-
-    <script src="/static/js/yourEvents.js"></script>
 {% endblock %}
+
 
 
