@@ -128,9 +128,9 @@ def your_events():
                 "title": event.title,
                 "description": event.description,
                 "month": event.date.strftime('%B'),
-                "date": event.date.strftime('%Y-%m-%d'),
-                "start_time": event.start_time.strftime('%H:%M:%S') if event.start_time else None,
-                "end_time": event.end_time.strftime('%H:%M:%S') if event.end_time else None,
+                "date": event.date.strftime('%m-%d-%y'),
+                "start_time": event.start_time.strftime('%I:%M %p') if event.start_time else None,
+                "end_time": event.end_time.strftime('%I:%M %p') if event.end_time else None,
             })
 
         # response_data = {"events": events_data}
@@ -235,6 +235,19 @@ def publish_event():
     # Return the events data as JSON
     response_data = {'events': events_data} if events_data else {'events': []}
     return jsonify(response_data)
+
+@app.route('/logout', methods=['GET'])
+def logout():
+    """Logout user."""
+    if 'current_user' in session:
+        # Clear session data
+        session.pop('current_user', None)
+        session.pop('user_id', None)
+        flash('You have been logged out.')
+    else:
+        flash('You are not currently logged in.')
+
+    return redirect('/')
 
 
 if __name__ == "__main__":

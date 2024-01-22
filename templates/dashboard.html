@@ -4,13 +4,10 @@
 {% block body %}
     <h1>Let's start scheming!</h1>
 
+
     
-    <a href="/your-events" class="btn btn-primary"><button>View your events!</button></a>
-    
-    <form id="form"> 
-        <input type="search events..." id="query" name="q" placeholder="Search...">
-        <button>search</button>
-    </form>
+
+    <!-- Main content of page -->
 
     <div id='calendar'></div>
     <meta charset='utf-8' />
@@ -18,8 +15,9 @@
     https://cdn.jsdelivr.net/npm/fullcalendar@6.1.10/index.global.min.js
     "></script>
     
+
     <script src='/static/js/dashboard.js'></script>
-    <!-- <script src="/static/js/yourEvents.js"></script> -->
+
     
 
 {% endblock %}
