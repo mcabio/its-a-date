@@ -49,12 +49,18 @@ document.addEventListener('DOMContentLoaded', function() {
                     window.location.href = '/create-event?date=' + info.dateStr;
                     break;
                 case 'timeGridWeek':
-                    // Week view - Redirect to a page to add an event for the selected day
-                    window.location.href = '/create-event?date=' + info.dateStr + '&time=' + info.date.getHours() + ':' + (info.date.getMinutes() < 30 ? '00' : '30');
+                    // Week/Day view - Redirect to a page to add an event for the selected day and time
+                    const formattedWeek = info.dateStr.slice(0, 10);  // Extract YYYY-MM-DD
+                    window.location.href = '/create-event?' +
+                    'date=' + formattedWeek +
+                    '&time=' + info.date.getHours() + ':' + (info.date.getMinutes() < 30 ? '00' : '30');
                     break;
                 case 'timeGridDay':
-                    // Day view - Redirect to a page to add an event for the selected half-hour slot
-                    window.location.href = '/create-event?date=' + info.dateStr + '&time=' + info.date.getHours() + ':' + (info.date.getMinutes() < 30 ? '00' : '30');
+                    // Week/Day view - Redirect to a page to add an event for the selected day and time
+                    const formattedDay = info.dateStr.slice(0, 10);  // Extract YYYY-MM-DD
+                    window.location.href = '/create-event?' +
+                    'date=' + formattedDay +
+                    '&time=' + info.date.getHours() + ':' + (info.date.getMinutes() < 30 ? '00' : '30');
                     break;
                 default:
                     // Handle other views as needed
