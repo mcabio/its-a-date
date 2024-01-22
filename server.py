@@ -127,6 +127,7 @@ def your_events():
                 "event_id": event.event_id,
                 "title": event.title,
                 "description": event.description,
+                "month": event.date.strftime('%B'),
                 "date": event.date.strftime('%Y-%m-%d'),
                 "start_time": event.start_time.strftime('%H:%M:%S') if event.start_time else None,
                 "end_time": event.end_time.strftime('%H:%M:%S') if event.end_time else None,
@@ -140,10 +141,7 @@ def your_events():
         # return jsonify({"error": str(e)}), 500
     return render_template('your-events.html', events_data=events_data)
 
-    #     return render_template('your-events.html', events_data=response_data)
-    # except Exception as e:
-    #     print("Error:", str(e))
-    #     return jsonify({"error": str(e)}), 500
+
 
 
 @app.route('/create-event', methods=["POST", "GET"])

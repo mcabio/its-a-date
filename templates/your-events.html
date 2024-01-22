@@ -4,28 +4,50 @@
 
 {% block body %}
     <h1>Your agenda!</h1>
+    <h1>Your Events</h1>
 
-    <div class="collapse.show">
-        <h1>Your Events</h1>
+    {% set rendered_months = [] %}
+    {% for data in events_data %}
+        {% if data.month not in rendered_months %}
+            <p class="d-inline-flex gap-1">
+                <a class="btn btn-primary" 
+                   data-bs-toggle="collapse" 
+                   href="#multiCollapse{{data.month}}" 
+                   role="button" 
+                   aria-expanded="false" 
+                   aria-controls="multiCollapse{{data.month}}">
+                   {{data.month}}
+                </a>
+            </p>
+            {% set _ = rendered_months.append(data.month) %}
+        {% endif %}
         
-        {% for data in events_data %}
-        <div>{{data.date}}</div>
-        {%endfor%}
-        <!-- Collapsible list -->
-        <div class="collapse" id="eventsCollapse"></div>
+        <div class="row">
+            <div class="col">
+                <div class="collapse multi-collapse" id="multiCollapse{{data.month}}">
+                    <div class="card card-body">
+                        Date: {{data.date}}<br>
+                        Description: {{data.description}}<br>
+                        Start time: {{data.start_time}}<br>
+                        End time: {{data.end_time}}
+                    </div>
+                </div>
+            </div>
+        </div>
+    {% endfor %}
 
-        <!-- Bootstrap CSS -->
-        <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" 
-              rel="stylesheet" 
-              integrity="sha384-T3c6CoIi6uLrA9TneNEoa7RxnatzjcDSCmG1MXxSR1GAsXEV/Dwwykc2MPK8M2HN" 
-              crossorigin="anonymous">
+    <!-- Bootstrap CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" 
+          rel="stylesheet" 
+          integrity="sha384-T3c6CoIi6uLrA9TneNEoa7RxnatzjcDSCmG1MXxSR1GAsXEV/Dwwykc2MPK8M2HN" 
+          crossorigin="anonymous">
 
+    <!-- JavaScript -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js" 
+            integrity="sha384-C6RzsynM9kWDrMNeT87bh95OGNyZPhcTNXj1NW7RuBCsyN/o0jlpcV8Qyq46cDfL" 
+            crossorigin="anonymous"></script>
 
-        <!-- JavaScript -->
-        <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js" 
-                integrity="sha384-C6RzsynM9kWDrMNeT87bh95OGNyZPhcTNXj1NW7RuBCsyN/o0jlpcV8Qyq46cDfL" 
-                crossorigin="anonymous"></script>
-
-        <script src="/static/js/yourEvents.js"></script>
-    </div>
+    <script src="/static/js/yourEvents.js"></script>
 {% endblock %}
+
+
