@@ -140,9 +140,10 @@ def your_events():
                 "event_id": event.event_id,
                 "title": event.title,
                 "description": event.description,
-                "month": event.date.strftime('%B'),
-                "date": event.date.strftime('%m-%d-%y'),
+                "month": event.start_date.strftime('%B'),
+                "start_date": event.start_date.strftime('%m-%d-%y'),
                 "start_time": event.start_time.strftime('%I:%M %p') if event.start_time else None,
+                "end_date": event.end_date.strftime('%m-%d-%y'),
                 "end_time": event.end_time.strftime('%I:%M %p') if event.end_time else None,
             })
 
@@ -166,29 +167,32 @@ def create_event():
 
     title = request.form.get("title")
     description = request.form.get("description")
-    date_str = request.form.get("date")
+    start_date_str = request.form.get("start_date")
     start_time_str = request.form.get("start_time")
+    end_date_str = request.form.get("end_date")
     end_time_str = request.form.get("end_time")
     created_on = datetime.now()
     updated_on = datetime.now()
     deleted_on = None
 
     # Convert date string to datetime object
-    date = datetime.strptime(date_str, "%Y-%m-%d").date()
+    start_date = datetime.strptime(start_date_str, "%Y-%m-%d").date()
+    end_date = datetime.strptime(end_date_str, "%Y-%m-%d").date()
 
     # this will combine the date and the time to create a start time and end time
-    start_time = datetime.combine(date, datetime.strptime(start_time_str, "%H:%M").time())
-    end_time = datetime.combine(date, datetime.strptime(end_time_str, "%H:%M").time())
+    start_time = datetime.combine(start_date, datetime.strptime(start_time_str, "%H:%M").time())
+    end_time = datetime.combine(end_date, datetime.strptime(end_time_str, "%H:%M").time())
 
-    event = crud.create_event(user, title, description, date, start_time, end_time, created_on, updated_on, deleted_on)
+    event = crud.create_event(user, title, description, start_date, start_time, end_date, end_time, created_on, updated_on, deleted_on)
 
     # This will prepare the datay for the json file.
     response_data = {
         "event_id": event.event_id,
         "title": event.title,
         "description": event.description,
-        "date": event.date,
+        "start_date": event.start_date,
         "start_time": event.start_time.isoformat(),
+        "end_date": event.end_date,
         "end_time": event.end_time.isoformat(),
         # "created_on": event.created_on.isoformat(),
         # "updated_on": event.updated_on.isoformat() if event.updated_on else None,
@@ -215,25 +219,21 @@ def publish_event():
     start_str = request.args.get('start')
     end_str = request.args.get('end')
 
-    print(f"Received request. Start: {start_str}, End: {end_str}")
-
     if start_str is None or end_str is None:
-        return abort(400, 'Missing start or end parameter')  # Bad Request
+        return jsonify({'error': 'Missing start or end parameter'}), 400
 
     try:
-        start_date = datetime.fromisoformat(start_str)
-        end_date = datetime.fromisoformat(end_str)
+        month_start = datetime.fromisoformat(start_str)
+        month_end = datetime.fromisoformat(end_str)
     except ValueError:
-        return abort(400, 'Invalid date format')  # Bad Request
+        return jsonify({'error': 'Invalid date format'}), 400
 
     # Query the database for events within the specified start and end dates and user_id
     events = Event.query.filter(
         Event.user_id == user_id,
-        Event.date.between(start_date.date(), end_date.date()),
-        Event.deleted_on == None
+        Event.start_date.between(month_start.date(), month_end.date()),
+        Event.deleted_on.is_(None)
     ).all()
-
-    # events = [event for event in events if event.deleted_on is None]
 
     # Convert events to a list of dictionaries containing the required information
     events_data = []
@@ -241,13 +241,14 @@ def publish_event():
         events_data.append({
             'title': event.title,
             'description': event.description,
-            'date': event.date.strftime('%Y-%m-%d'),
+            'start_date': event.start_date.strftime('%Y-%m-%d'),
             'start_time': event.start_time.strftime('%H:%M:%S') if event.start_time else None,
+            'end_date': event.end_date.strftime('%Y-%m-%d'),
             'end_time': event.end_time.strftime('%H:%M:%S') if event.end_time else None,
         })
 
     # Return the events data as JSON
-    response_data = {'events': events_data} if events_data else {'events': []}
+    response_data = {'events': events_data}
     return jsonify(response_data)
 
 
@@ -264,27 +265,33 @@ def edit_event(event_id):
 
     if request.method == "GET":
         # Convert date and times to string for rendering in the form
-        event_date = event.date.strftime('%Y-%m-%d') if event.date else ''
+        start_date = event.start_date.strftime('%Y-%m-%d') if event.start_date else ''
         start_time = event.start_time.strftime('%H:%M') if event.start_time else ''
+        end_date = event.end_date.strftime('%Y-%m-%d') if event.end_date else ''
         end_time = event.end_time.strftime('%H:%M') if event.end_time else ''
 
         # Pass the event details to the template context
-        return render_template('edit-event.html', event=event, event_date=event_date, start_time=start_time, end_time=end_time)
+        return render_template('edit-event.html', event=event, start_date=start_date, start_time=start_time, end_date=end_date, end_time=end_time)
     
     # Process form submission (POST request)
     try:
         event.title = request.form.get('title')
         event.description = request.form.get('description')
 
-        # Update date if provided
-        date_str = request.form.get('date')
-        if date_str:
-            event.date = datetime.strptime(date_str, "%Y-%m-%d").date()
+        # Update start date if provided
+        start_date_str = request.form.get('start_date')
+        if start_date_str:
+            event.start_date = datetime.strptime(start_date_str, "%Y-%m-%d").date()
 
         # Update start time if provided
         start_time_str = request.form.get('start_time')
         if start_time_str:
             event.start_time = datetime.strptime(start_time_str, "%H:%M").time()
+
+        # Update end date if provided
+        end_date_str = request.form.get('end_date')
+        if end_date_str:
+            event.end_date = datetime.strptime(end_date_str, "%Y-%m-%d").date()
 
         # Update end time if provided
         end_time_str = request.form.get('end_time')

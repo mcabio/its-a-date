@@ -5,21 +5,26 @@
     <h1>Let's start scheming!</h1>    
 
     <h2>Log In</h2>
-    <form action="/login" method="POST">
-        <label>
-            Username:
-            <input type="text" id="username" name="username" automcomplete="username">
-        </label>
-    
-        <label>
-            Password:
-        <input type="password" id="password" name="password" autocomplete="current-password">
-        </label>
-        <input type="submit" value="Log In">
+    <form action="/login" method="POST" class="row gy-2 gx-3 align-items-center">
+        <div class="col-auto">
+            <label for="username" class="visually-hidden">Username</label>
+            <input type="text" class="form-control" id="autoSizingInput" name="username" placeholder="Username">
+        </div>
+        <div class="col-auto">
+            <label class="visually-hidden" for="autoSizingInputGroup">Password</label>
+            <input type="password" class="form-control" id="autoSizingInputGroup" name="password" placeholder="Password">
+        </div>
+        <div class="col-auto">
+            <button type="submit" class="btn btn-primary" value="Log in">Submit</button>
+        </div>
     </form>
-    <ul>
+    
+
+      <ul>
         <li><a href="/new-user">New around here? Sign up!</a></li>
     </ul>
 {% endblock %}
+
+
 
 

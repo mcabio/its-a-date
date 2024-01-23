@@ -28,9 +28,8 @@ document.addEventListener('DOMContentLoaded', function() {
                     var eventsData = data.events.map(event => ({
                         title: event.title,
                         description: event.description,
-                        date: event.date,
-                        start: event.date + (event.start_time ? 'T' + event.start_time : ''),
-                        end: event.date + (event.end_time ? 'T' + event.end_time : ''),
+                        start: event.start_date + (event.start_time ? 'T' + event.start_time : ''),
+                        end: event.end_date + (event.end_time ? 'T' + event.end_time : ''),
                         allDay: false
                     }));
             
@@ -46,20 +45,20 @@ document.addEventListener('DOMContentLoaded', function() {
             switch (info.view.type) {
                 case 'dayGridMonth':
                     // Month view - Redirect to a page to add an event for the selected day
-                    window.location.href = '/create-event?date=' + info.dateStr;
+                    window.location.href = '/create-event?start_date=' + info.dateStr;
                     break;
                 case 'timeGridWeek':
                     // Week/Day view - Redirect to a page to add an event for the selected day and time
                     const formattedWeek = info.dateStr.slice(0, 10);  // Extract YYYY-MM-DD
                     window.location.href = '/create-event?' +
-                    'date=' + formattedWeek +
+                    'start_date=' + formattedWeek +
                     '&time=' + info.date.getHours() + ':' + (info.date.getMinutes() < 30 ? '00' : '30');
                     break;
                 case 'timeGridDay':
                     // Week/Day view - Redirect to a page to add an event for the selected day and time
                     const formattedDay = info.dateStr.slice(0, 10);  // Extract YYYY-MM-DD
                     window.location.href = '/create-event?' +
-                    'date=' + formattedDay +
+                    'start_date=' + formattedDay +
                     '&time=' + info.date.getHours() + ':' + (info.date.getMinutes() < 30 ? '00' : '30');
                     break;
                 default:

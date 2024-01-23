@@ -6,7 +6,7 @@
     <h1>Your agenda!</h1>
 
     <div class="d-flex flex-wrap">
-        {% set sorted_events_data = events_data|sort(attribute='date') %}
+        {% set sorted_events_data = events_data|sort(attribute='start_date') %}
         {% set rendered_months = [] %}
 
         {% for data in sorted_events_data %}
@@ -29,9 +29,10 @@
                     <div class="collapse multi-collapse" id="multiCollapse{{data.month}}">
                         <div class="card card-body">
                             Event: {{data.title}}<br>
-                            Date: {{data.date}}<br>
                             Description: {{data.description}}<br>
+                            Start Date: {{data.start_date}}<br>
                             Start time: {{data.start_time}}<br>
+                            End Date: {{data.end_date}}<br>
                             End time: {{data.end_time}}<br>
                            
                             <!-- Edit button -->

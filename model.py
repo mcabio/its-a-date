@@ -49,8 +49,9 @@ class Event(db.Model):
                         db.ForeignKey('users.user_id'))
     title = db.Column(db.String)
     description = db.Column(db.Text)
-    date = db.Column(db.Date)
+    start_date = db.Column(db.Date)
     start_time = db.Column(db.Time)
+    end_date = db.Column(db.Date)
     end_time = db.Column(db.Time)
     created_on = db.Column(db.DateTime)
     updated_on = db.Column(db.DateTime)
@@ -61,7 +62,7 @@ class Event(db.Model):
     notifications = db.relationship('Notification', back_populates='event')
 
     def __repr__(self):
-        return f'<Event: {self.title} | event_id = {self.event_id} | Scheduled on {self.date} by {self.users.username}>'
+        return f'<Event: {self.title} | event_id = {self.event_id} | Scheduled on {self.start_date} by {self.users.username}>'
     
 class Notification(db.Model):
     """Event reminders a user sets up"""
