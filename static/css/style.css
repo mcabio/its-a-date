@@ -62,7 +62,7 @@ html, body {
   }
 .create-event {
     color: white;
-    background-color: black;
+    background-color: rgb(177, 164, 164);
     border: 1px solid black;
     border-radius: 5px;
     font-size: 24px;

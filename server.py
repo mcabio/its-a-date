@@ -93,6 +93,37 @@ def register_user():
         db.session.commit()
         flash("Welcome! Please log in.")
         return redirect('/')
+    
+@app.route('/user-preferences', methods=["GET"])
+def user_preferences():
+    # Get user_id from the session
+    user_id = session.get('user_id')
+
+    if not user_id:
+        flash("Please log in to access the dashboard.")
+        return redirect('/')
+
+    # Query the database to get user preferences based on user_id
+    user_preferences = crud.get_user_by_id(user_id)
+
+    if not user_preferences:
+        return jsonify({'error': 'User not found'}), 404
+
+    # Extract relevant information
+    user_info = {
+        'user_id': user_preferences.user_id,
+        'day_start_time': user_preferences.day_start_time.strftime('%H:%M:%S') if user_preferences.day_start_time else None,
+        'day_end_time': user_preferences.day_end_time.strftime('%H:%M:%S') if user_preferences.day_end_time else None
+        # Add other user-specific information as needed
+    }
+
+    user_data = {'user_preferences': user_info}
+
+    return jsonify(user_data)
+
+
+
+
 
 @app.route('/dashboard')
 def dashboard():
@@ -159,6 +190,13 @@ def your_events():
 @app.route('/create-event', methods=["POST", "GET"])
 def create_event():
     """Create new event"""
+    if 'current_user' not in session:
+        flash("Please log in to schedule events.")
+        return redirect('/')
+
+    username = session['current_user']
+    user = crud.get_user_by_username(username)
+
     if request.method == "GET":
         return render_template('create-event.html')
 
