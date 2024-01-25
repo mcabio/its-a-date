@@ -1,0 +1,23 @@
+{% extends 'base.html' %}
+{% block title %} Edit User {% endblock %}
+{% block body %}
+
+<form action="/edit-user/{{ user.user_id }}" method="POST">
+    
+    <p>
+        Old Password <input type="password" name="old_password">
+    </p>
+    <p>
+        New Password <input type="password" name="new_password">
+    </p>
+    <p>
+        What time does your day start? <input type="time" name="day_start_time" value="{{ user.day_start_time }}">
+    </p>
+    <p>
+        What time does your day end? <input type="time" name="day_end_time" value="{{ user.day_end_time }}">
+    </p>
+        <input type="submit">
+</form>
+
+ 
+{% endblock body %}

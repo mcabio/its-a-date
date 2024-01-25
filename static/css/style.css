@@ -61,7 +61,7 @@ html, body {
     color: black;
   }
 .create-event {
-    color: white;
+    color: rgba(28, 3, 3, 0.973);
     background-color: rgb(177, 164, 164);
     border: 1px solid black;
     border-radius: 5px;

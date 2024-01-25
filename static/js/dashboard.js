@@ -25,13 +25,15 @@ document.addEventListener('DOMContentLoaded', function() {
                 },
                 slotMinTime: userDayStartTime, // Set the minimum time based on user preferences
                 slotMaxTime: userDayEndTime,   // Set the maximum time based on user preferences
+                eventColor: '#613389',
+                eventTextColor: '#E6D8EC',
                 events: function(info, successCallback, failureCallback) {
                     // Fetch events from the server based on the current view
                     console.log(info);
                     const start = info.startStr;
                     const end = info.endStr;
                     const searchParams = new URLSearchParams({ start, end });
-                    const url = '/publish-event?' + searchParams.toString();
+                    const url = '/api/event?' + searchParams.toString();
 
                     fetch(url, {
                         method: 'GET',
@@ -66,16 +68,18 @@ document.addEventListener('DOMContentLoaded', function() {
                         case 'timeGridWeek':
                             // Week/Day view - Redirect to a page to add an event for the selected day and time
                             const formattedWeek = info.dateStr.slice(0, 10);  // Extract YYYY-MM-DD
+                            const hours = info.date.getHours() < 10 ? '0' + info.date.getHours() : info.date.getHours();
+                            const minutes = info.date.getMinutes() < 30 ? '00' : '30';
                             window.location.href = '/create-event?' +
                                 'start_date=' + formattedWeek +
-                                '&time=' + info.date.getHours() + ':' + (info.date.getMinutes() < 30 ? '00' : '30');
+                                '&time=' + hours + ':' + minutes;
                             break;
                         case 'timeGridDay':
                             // Week/Day view - Redirect to a page to add an event for the selected day and time
                             const formattedDay = info.dateStr.slice(0, 10);  // Extract YYYY-MM-DD
                             window.location.href = '/create-event?' +
                                 'start_date=' + formattedDay +
-                                '&time=' + info.date.getHours() + ':' + (info.date.getMinutes() < 30 ? '00' : '30');
+                                '&time=' + hours + ':' + minutes;
                             break;
                         default:
                             // Handle other views as needed

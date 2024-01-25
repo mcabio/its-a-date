@@ -2,9 +2,10 @@
 
 from flask import (Flask, jsonify, render_template, request, abort, flash, session,
                    redirect, url_for)
+import requests
 from werkzeug.security import check_password_hash
 from passlib.hash import argon2
-from model import connect_to_db, db, Event
+from model import connect_to_db, db, Event, User
 from datetime import date, datetime, timedelta
 from sqlalchemy import func
 import crud
@@ -41,7 +42,6 @@ def login():
         # If the user exists and the password is correct, store username in the session
         session['current_user'] = username
         session['user_id'] = user.user_id
-        flash(f'Nice to see you again {username}!')
         return redirect(url_for('dashboard'))
 
     elif user and argon2.verify(password, user.password):
@@ -123,6 +123,53 @@ def user_preferences():
 
 
 
+@app.route('/edit-user/<int:user_id>', methods=["GET", "POST"])
+def edit_user(user_id):
+    """Edit user"""
+    print("Executing edit_user route")
+    if request.method == "GET":
+        user = crud.get_user_by_id(user_id)
+        return render_template('edit-user.html', user=user)
+
+    old_password = request.form.get("old_password")
+    new_password = request.form.get("new_password")
+    day_start_time = request.form.get("day_start_time")
+    day_end_time = request.form.get("day_end_time")
+
+    user = crud.get_user_by_id(user_id)
+
+    if not user:
+        flash('Old password incorrect, please try again.')
+        return render_template('edit-user.html')
+    
+    else: 
+        if user.password.startswith('$argon2'):
+            # If the password is already hashed with Argon2, verify it
+            if not argon2.verify(old_password, user.password):
+                flash("Old password is incorrect. Please try again.")
+                return render_template('edit-user.html', user=user)
+
+
+    # Update user preferences
+    user.password = argon2.hash(new_password)
+    user.day_start_time = day_start_time
+    user.day_end_time = day_end_time
+
+    db.session.commit()
+
+    if 'current_user' in session:
+        # Clear session data
+        session.pop('current_user', None)
+        session.pop('user_id', None)
+        flash("Preferences updated successfully! Please log in with the new password.")
+    else:
+        flash('You are not currently logged in.')
+
+    return redirect('/')
+
+
+    
+
 
 
 @app.route('/dashboard')
@@ -150,7 +197,7 @@ def dashboard():
     return render_template('dashboard.html', user=user, dashboard_events=dashboard_events)
 
 
-@app.route('/your-events', methods=["GET", "POST"])
+@app.route('/my-events', methods=["GET", "POST"])
 def your_events():
     # Assuming you have the user_id in the session
     user_id = session.get('user_id')
@@ -182,7 +229,8 @@ def your_events():
         print("Error:", str(e))
         # return jsonify({"error": str(e)}), 500
 
-    return render_template('your-events.html', events_data=events_data)
+    return render_template('my-events.html', events_data=events_data)
+
 
 
 
@@ -243,7 +291,7 @@ def create_event():
     
     return redirect('/dashboard')
 
-@app.route('/publish-event', methods=["GET"])
+@app.route('/api/event', methods=["GET"])
 def publish_event():
     """Publish events onto the calendar for the user in session."""
     
@@ -288,6 +336,186 @@ def publish_event():
     # Return the events data as JSON
     response_data = {'events': events_data}
     return jsonify(response_data)
+
+
+# @app.route('/api/availability', methods=['GET'])
+# def api_availability():
+#     """Shows your availability for the month"""
+
+#     # Get user_id from the session
+#     user_id = session.get('user_id')
+
+#     if user_id is None:
+#         return jsonify({'error': 'User not logged in'}), 401
+
+#     # Get the start and end dates of the month that is currently on view on the browser
+#     start_str = request.args.get('start')
+#     end_str = request.args.get('end')
+#     print(f'This is start: {start_str}')
+#     print(f'This is end: {end_str}')
+
+
+#     if start_str is None or end_str is None:
+#         return jsonify({'error': 'Missing start or end parameter'}), 400
+
+#     try:
+#         month_start = datetime.fromisoformat(start_str)
+#         month_end = datetime.fromisoformat(end_str)
+#     except ValueError:
+#         return jsonify({'error': 'Invalid date format'}), 400
+
+#     # Query the database for events within the specified start and end dates and user_id
+#     events = Event.query.filter(
+#         Event.user_id == user_id,
+#         Event.start_date.between(month_start.date(), month_end.date()),
+#         Event.deleted_on.is_(None)
+#     ).all()
+
+#     # Extract the dates with events
+#     dates_with_events = set(event.start_date for event in events)
+
+#     # Calculate the days without events in the given month
+#     days_without_events = [date for date in (month_start + timedelta(n) for n in range((month_end - month_start).days + 1))
+#                            if date not in dates_with_events]
+
+#     # Format the dates in the desired format (e.g., '2022-01-01')
+#     days_available = [date.strftime('%Y-%m-%d') for date in days_without_events]
+
+#     available_data = {'availability': days_available}
+#     print(available_data)
+#     return jsonify(available_data)
+
+
+@app.route('/api/availability', methods=['GET'])
+def api_availability():
+
+    user_id = session['user_id']
+
+    start_str = request.args.get('start')
+    end_str = request.args.get('end')
+    print(f'!!!!!THIS IS THE START_STR!!!!!: {start_str}')
+    print(f'!!!!!THIS IS THE END_STR!!!!!: {end_str}')
+
+    month_start = datetime.fromisoformat(start_str)
+    month_end = datetime.fromisoformat(end_str)
+
+    # Query the database for events within the specified start and end dates and user_id
+    events = Event.query.filter(
+        Event.user_id == user_id,
+        Event.start_date.between(month_start.date(), month_end.date()),
+        Event.deleted_on.is_(None)
+    ).all()
+
+
+    # Extract the dates with events
+    dates_with_events = set(event.start_date for event in events)
+    print(f'!!!!!THESE ARE THE DAYS WITH EVENTS!!!!!: {dates_with_events}')
+
+    # Calculate the days without events in the given month
+    days_without_events = [date for date in (month_start + timedelta(n) for n in range((month_end - month_start).days + 1))
+                           if date.date() not in dates_with_events]
+    print(f'!!!!!THESE ARE THE DAYS WITHOUT EVENTS!!!!!: {days_without_events}')
+
+    # Format the dates in the desired format (e.g., '2022-01-01')
+    days_available = [date.strftime('%Y-%m-%d') for date in days_without_events]
+    print(f'!!!THESE ARE DAYS AVAILABLE!!!: {days_available}')
+
+    available_data = {'availability': days_available}
+    print(available_data)
+    return jsonify(available_data)
+
+# This route just takes the user through, grabs info from dashboard form, and renders availability. 
+# Type is hidden, month that they give us. This will 
+@app.route('/my-availability', methods=['GET', 'POST'])
+def my_availability():
+    # Check if the user is authenticated
+    if 'current_user' not in session:
+        flash("Please log in to access the dashboard.")
+        return redirect('/')
+
+    user_id = session['user_id']  # Change session.get('user_id') to session['user_id']
+
+    # Check if the user exists
+    user = User.query.get(user_id)
+    if user is None:
+        flash("User not found.")
+        return redirect('/')
+
+    # # Get the start and end dates for the month currently on view in the browser
+    # start_str = request.args.get('start')
+    # end_str = request.args.get('end')
+
+    # if start_str is None or end_str is None:
+    #     flash("Invalid date parameters.")
+    #     return redirect('/dashboard')
+
+    # # Call the /api/availability endpoint to get available slots
+    # availability_data = api_availability(start_str, end_str, user_id)
+
+    # available_slots = availability_data.get('availability', [])
+
+    # # Query for dashboard events (excluding deleted events)
+    # events = Event.query.filter(
+    #     Event.user_id == user_id,
+    #     Event.deleted_on.is_(None)
+    # ).all()
+
+    # # Pass the user, events, and available_slots data to the template
+    return render_template('my-availability.html', user=user)
+
+
+
+# @app.route('/my-availability', methods=['GET'])
+# def my_availability():
+#     # Check if the user is authenticated
+#     if 'current_user' not in session:
+#         flash("Please log in to access the dashboard.")
+#         return redirect('/')
+
+#     username = session['current_user']
+#     user = crud.get_user_by_username(username)
+
+#     # Check if the user exists
+#     if user is None:
+#         flash("User not found.")
+#         return redirect('/')
+
+#     # Get the start and end dates for the month currently on view in the browser
+#     start_str = request.args.get('start')
+#     end_str = request.args.get('end')
+#     print(f'This is start: {start}')
+#     print(f'This is end: {end}')
+
+
+#     if start_str is None or end_str is None:
+#         flash("Invalid date parameters.")
+#         return redirect('/dashboard')
+
+#     month_start = datetime.fromisoformat(start_str)
+#     month_end = datetime.fromisoformat(end_str)
+
+#     # Call the /api/availability endpoint to get available slots
+#     availability_response = requests.get(
+#         f'/api/availability?start={start_str}&end={end_str}'
+#     )
+
+#     if availability_response.status_code != 200:
+#         flash("Error fetching availability.")
+#         return redirect('/')
+
+#     available_slots = availability_response.json().get('availability', [])
+
+#     # Query for dashboard events (excluding deleted events)
+#     events = Event.query.filter(
+#         Event.user_id == user.user_id,
+#         Event.deleted_on.is_(None)
+#     ).all()
+
+#     # Pass the user, events, and available_slots data to the template
+#     return render_template('my-availability.html', user=user, events=events, available_slots=available_slots)
+
+
+
 
 
 @app.route('/edit-event/<int:event_id>', methods=['POST', 'GET'])
@@ -346,7 +574,7 @@ def edit_event(event_id):
     db.session.commit()
 
     flash('Event updated successfully.')
-    return redirect('/your-events')
+    return redirect('/my-events')
 
 
 @app.route('/delete-event/<int:event_id>', methods=['POST', 'GET'])
@@ -368,7 +596,7 @@ def delete_event(event_id):
     db.session.commit()
 
     flash('Event deleted successfully.')
-    return redirect('/your-events')
+    return redirect('/my-events')
 
 
 
