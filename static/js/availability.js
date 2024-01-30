@@ -24,6 +24,8 @@ document.addEventListener('DOMContentLoaded', function() {
                 },
                 slotMinTime: userDayStartTime,
                 slotMaxTime: userDayEndTime,
+                eventColor: '#613389',
+                eventTextColor: '#E6D8EC',
                 events: function(info, successCallback, failureCallback) {
                     // Fetch events from the server based on the current view
                     console.log('THIS IS INFO:', info);

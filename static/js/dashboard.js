@@ -100,8 +100,7 @@ document.addEventListener('DOMContentLoaded', function() {
                         case 'listMonth':
                             window.location.href = '/edit-event/' + event_id;
                             break;
-                            
-                                // Handle other views as needed
+                    
                         default:
                             // Handle other views as needed
                     }
