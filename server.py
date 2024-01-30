@@ -271,7 +271,7 @@ def create_event():
 
     event = crud.create_event(user, title, description, start_date, start_time, end_date, end_time, created_on, updated_on, deleted_on)
 
-    # This will prepare the datay for the json file.
+    # This will prepare the data for the json file.
     response_data = {
         "event_id": event.event_id,
         "title": event.title,
@@ -338,52 +338,6 @@ def publish_event():
     return jsonify(response_data)
 
 
-# @app.route('/api/availability', methods=['GET'])
-# def api_availability():
-#     """Shows your availability for the month"""
-
-#     # Get user_id from the session
-#     user_id = session.get('user_id')
-
-#     if user_id is None:
-#         return jsonify({'error': 'User not logged in'}), 401
-
-#     # Get the start and end dates of the month that is currently on view on the browser
-#     start_str = request.args.get('start')
-#     end_str = request.args.get('end')
-#     print(f'This is start: {start_str}')
-#     print(f'This is end: {end_str}')
-
-
-#     if start_str is None or end_str is None:
-#         return jsonify({'error': 'Missing start or end parameter'}), 400
-
-#     try:
-#         month_start = datetime.fromisoformat(start_str)
-#         month_end = datetime.fromisoformat(end_str)
-#     except ValueError:
-#         return jsonify({'error': 'Invalid date format'}), 400
-
-#     # Query the database for events within the specified start and end dates and user_id
-#     events = Event.query.filter(
-#         Event.user_id == user_id,
-#         Event.start_date.between(month_start.date(), month_end.date()),
-#         Event.deleted_on.is_(None)
-#     ).all()
-
-#     # Extract the dates with events
-#     dates_with_events = set(event.start_date for event in events)
-
-#     # Calculate the days without events in the given month
-#     days_without_events = [date for date in (month_start + timedelta(n) for n in range((month_end - month_start).days + 1))
-#                            if date not in dates_with_events]
-
-#     # Format the dates in the desired format (e.g., '2022-01-01')
-#     days_available = [date.strftime('%Y-%m-%d') for date in days_without_events]
-
-#     available_data = {'availability': days_available}
-#     print(available_data)
-#     return jsonify(available_data)
 
 
 @app.route('/api/availability', methods=['GET'])
@@ -441,78 +395,10 @@ def my_availability():
         flash("User not found.")
         return redirect('/')
 
-    # # Get the start and end dates for the month currently on view in the browser
-    # start_str = request.args.get('start')
-    # end_str = request.args.get('end')
-
-    # if start_str is None or end_str is None:
-    #     flash("Invalid date parameters.")
-    #     return redirect('/dashboard')
-
-    # # Call the /api/availability endpoint to get available slots
-    # availability_data = api_availability(start_str, end_str, user_id)
-
-    # available_slots = availability_data.get('availability', [])
-
-    # # Query for dashboard events (excluding deleted events)
-    # events = Event.query.filter(
-    #     Event.user_id == user_id,
-    #     Event.deleted_on.is_(None)
-    # ).all()
-
+  
     # # Pass the user, events, and available_slots data to the template
     return render_template('my-availability.html', user=user)
 
-
-
-# @app.route('/my-availability', methods=['GET'])
-# def my_availability():
-#     # Check if the user is authenticated
-#     if 'current_user' not in session:
-#         flash("Please log in to access the dashboard.")
-#         return redirect('/')
-
-#     username = session['current_user']
-#     user = crud.get_user_by_username(username)
-
-#     # Check if the user exists
-#     if user is None:
-#         flash("User not found.")
-#         return redirect('/')
-
-#     # Get the start and end dates for the month currently on view in the browser
-#     start_str = request.args.get('start')
-#     end_str = request.args.get('end')
-#     print(f'This is start: {start}')
-#     print(f'This is end: {end}')
-
-
-#     if start_str is None or end_str is None:
-#         flash("Invalid date parameters.")
-#         return redirect('/dashboard')
-
-#     month_start = datetime.fromisoformat(start_str)
-#     month_end = datetime.fromisoformat(end_str)
-
-#     # Call the /api/availability endpoint to get available slots
-#     availability_response = requests.get(
-#         f'/api/availability?start={start_str}&end={end_str}'
-#     )
-
-#     if availability_response.status_code != 200:
-#         flash("Error fetching availability.")
-#         return redirect('/')
-
-#     available_slots = availability_response.json().get('availability', [])
-
-#     # Query for dashboard events (excluding deleted events)
-#     events = Event.query.filter(
-#         Event.user_id == user.user_id,
-#         Event.deleted_on.is_(None)
-#     ).all()
-
-#     # Pass the user, events, and available_slots data to the template
-#     return render_template('my-availability.html', user=user, events=events, available_slots=available_slots)
 
 
 

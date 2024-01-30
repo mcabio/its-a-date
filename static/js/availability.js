@@ -20,7 +20,7 @@ document.addEventListener('DOMContentLoaded', function() {
                 initialView: 'listMonth',
                 headerToolbar: {
                     left: 'prev,next today',
-                    center: 'title',
+                    center: 'title'
                 },
                 slotMinTime: userDayStartTime,
                 slotMaxTime: userDayEndTime,
@@ -41,7 +41,7 @@ document.addEventListener('DOMContentLoaded', function() {
                         if (data && data.availability) {
                             // Process the received data and pass it to FullCalendar
                             var availabilityData = data.availability.map(date => ({
-                                title: 'Available',
+                                title: ' ',
                                 start: date,
                                 allDay: true
                             }));
@@ -53,7 +53,8 @@ document.addEventListener('DOMContentLoaded', function() {
                         }
                     });
                 },
-                dateClick: function(info) {
+                eventClick: function(info) {
+                    console.log('Event clicked:', info);
                     // Handle date clicks based on the view
                     switch (info.view.type) {
                         case 'listMonth':
