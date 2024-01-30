@@ -298,6 +298,7 @@ def publish_event():
     # Get user_id from the session
     user_id = session.get('user_id')
 
+
     if user_id is None:
         return jsonify({'error': 'User not logged in'}), 401
 
@@ -325,6 +326,7 @@ def publish_event():
     events_data = []
     for event in events:
         events_data.append({
+            'event_id': event.event_id,
             'title': event.title,
             'description': event.description,
             'start_date': event.start_date.strftime('%Y-%m-%d'),
@@ -340,9 +342,50 @@ def publish_event():
 
 
 
+# @app.route('/api/availability', methods=['GET'])
+# def api_availability():
+
+#     user_id = session['user_id']
+
+#     start_str = request.args.get('start')
+#     end_str = request.args.get('end')
+#     print(f'!!!!!THIS IS THE START_STR!!!!!: {start_str}')
+#     print(f'!!!!!THIS IS THE END_STR!!!!!: {end_str}')
+
+#     month_start = datetime.fromisoformat(start_str)
+#     month_end = datetime.fromisoformat(end_str)
+
+#     # Query the database for events within the specified start and end dates and user_id
+#     events = Event.query.filter(
+#         Event.user_id == user_id,
+#         Event.start_date.between(month_start.date(), month_end.date()),
+#         Event.deleted_on.is_(None)
+#     ).all()
+
+
+#     # Extract the dates with events
+#     dates_with_events = set()
+#     for event in events:
+#     # Include all dates within the range of the event
+#         event_dates = [event.start_date + timedelta(n) for n in range((event.end_date - event.start_date).days + 1)]
+#     dates_with_events.update(event_dates)
+#     print(f'!!!!!THESE ARE THE DAYS WITH EVENTS!!!!!: {dates_with_events}')
+
+#     # Calculate the days without events in the given month
+#     days_without_events = [date for date in (month_start + timedelta(n) for n in range((month_end - month_start).days + 1))
+#                            if date.date() not in dates_with_events]
+#     print(f'!!!!!THESE ARE THE DAYS WITHOUT EVENTS!!!!!: {days_without_events}')
+
+#     # Format the dates in the desired format (e.g., '2022-01-01')
+#     days_available = [date.strftime('%Y-%m-%d') for date in days_without_events]
+#     print(f'!!!THESE ARE DAYS AVAILABLE!!!: {days_available}')
+
+#     available_data = {'availability': days_available}
+#     print(available_data)
+#     return jsonify(available_data)
+
 @app.route('/api/availability', methods=['GET'])
 def api_availability():
-
     user_id = session['user_id']
 
     start_str = request.args.get('start')
@@ -360,9 +403,12 @@ def api_availability():
         Event.deleted_on.is_(None)
     ).all()
 
-
     # Extract the dates with events
-    dates_with_events = set(event.start_date for event in events)
+    dates_with_events = set()
+    for event in events:
+        # Include all dates within the range of the event
+        event_dates = [event.start_date + timedelta(n) for n in range((event.end_date - event.start_date).days + 1)]
+        dates_with_events.update(event_dates)
     print(f'!!!!!THESE ARE THE DAYS WITH EVENTS!!!!!: {dates_with_events}')
 
     # Calculate the days without events in the given month
@@ -378,8 +424,9 @@ def api_availability():
     print(available_data)
     return jsonify(available_data)
 
-# This route just takes the user through, grabs info from dashboard form, and renders availability. 
-# Type is hidden, month that they give us. This will 
+
+
+
 @app.route('/my-availability', methods=['GET', 'POST'])
 def my_availability():
     # Check if the user is authenticated
@@ -413,7 +460,7 @@ def edit_event(event_id):
     # Check if the event exists
     if event is None:
         flash("Event not found.")
-        return redirect('/your-events')
+        return redirect('/my-events')
 
     if request.method == "GET":
         # Convert date and times to string for rendering in the form

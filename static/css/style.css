@@ -4,7 +4,7 @@ body {
   font-size: var(--bs-body-font-size);
   font-weight: var(--bs-body-font-weight);
   line-height: var(--bs-body-line-height);
-  color: black
+  color: rgba(122, 42, 220, 0.865)
   text-align: var(--bs-body-text-align);
 }
 
@@ -15,7 +15,7 @@ html, body {
     padding: 0;
     font-family: Arial, Helvetica Neue, Helvetica, sans-serif;
     font-size: 14px;
-    color: white
+    color: rgba(154, 96, 225, 0.521)
   }
 
   .fc-list-event-time {
@@ -30,7 +30,7 @@ html, body {
     height: calc(100vh - 190px);
   }
   #calendar a {
-    color: gray;
+    color: rgb(195, 136, 225);
   }
   #calendar .fc-button-primary {
     background-color: rgb(232, 25, 243);
@@ -72,7 +72,7 @@ html, body {
 .fc-list-event-time {
     display: none;
   }
-  .fc-h-event .fc-event-title {
+.fc-h-event .fc-event-title {
     font-size: 11px;
   }
   .calendar-container {
@@ -80,6 +80,11 @@ html, body {
     justify-content: center;
     height: calc(100vh - 190px);
   }
+
+
+element.style {
+    height: 222.963px;
+}
    
 
   /* Font color of calendar month view */

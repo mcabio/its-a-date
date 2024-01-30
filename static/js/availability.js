@@ -58,8 +58,9 @@ document.addEventListener('DOMContentLoaded', function() {
                     // Handle date clicks based on the view
                     switch (info.view.type) {
                         case 'listMonth':
-                            // Redirect to a page to add an event for the selected day
-                            window.location.href = '/create-event?start_date=' + info.dateStr;
+                            // Format the date to "yyyy-MM-dd" before appending it to the URL
+                            const formattedDate = info.event.start.toISOString().split('T')[0];
+                            window.location.href = '/create-event?start_date=' + formattedDate;
                             break;
                         default:
                             // Handle other views as needed

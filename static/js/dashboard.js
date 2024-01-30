@@ -23,8 +23,8 @@ document.addEventListener('DOMContentLoaded', function() {
                     center: 'title',
                     right: 'dayGridMonth,timeGridWeek,timeGridDay,listMonth'
                 },
-                slotMinTime: userDayStartTime, // Set the minimum time based on user preferences
-                slotMaxTime: userDayEndTime,   // Set the maximum time based on user preferences
+                slotMinTime: userDayStartTime,
+                slotMaxTime: userDayEndTime,
                 eventColor: '#613389',
                 eventTextColor: '#E6D8EC',
                 events: function(info, successCallback, failureCallback) {
@@ -42,19 +42,22 @@ document.addEventListener('DOMContentLoaded', function() {
                     .then(response => response.json())
                     .then(data => {
                         if (data && data.events) {
-                            // Process the received data and pass it to FullCalendar
                             var eventsData = data.events.map(event => ({
                                 title: event.title,
                                 description: event.description,
                                 start: event.start_date + (event.start_time ? 'T' + event.start_time : ''),
                                 end: event.end_date + (event.end_time ? 'T' + event.end_time : ''),
-                                allDay: false
+                                allDay: false,
+                                extendedProps: {
+                                    event_id: event.event_id,  // Your unique identifier for the event
+                                    // ... other additional properties
+                                }
                             }));
 
-                            successCallback(eventsData);  // Pass the events data to FullCalendar
+                            successCallback(eventsData);
                         } else {
                             console.error('Received data or events array is undefined.');
-                            failureCallback('Received data or events array is undefined.');  // Pass an error to FullCalendar
+                            failureCallback('Received data or events array is undefined.');
                         }
                     });
                 },
@@ -62,25 +65,43 @@ document.addEventListener('DOMContentLoaded', function() {
                     // Handle date clicks based on the view
                     switch (info.view.type) {
                         case 'dayGridMonth':
-                            // Month view - Redirect to a page to add an event for the selected day
                             window.location.href = '/create-event?start_date=' + info.dateStr;
                             break;
                         case 'timeGridWeek':
-                            // Week/Day view - Redirect to a page to add an event for the selected day and time
-                            const formattedWeek = info.dateStr.slice(0, 10);  // Extract YYYY-MM-DD
-                            const hours = info.date.getHours() < 10 ? '0' + info.date.getHours() : info.date.getHours();
-                            const minutes = info.date.getMinutes() < 30 ? '00' : '30';
+                            const formattedWeek = info.dateStr.slice(0, 10);
                             window.location.href = '/create-event?' +
                                 'start_date=' + formattedWeek +
-                                '&time=' + hours + ':' + minutes;
+                                '&time=' + info.date.getHours() + ':' + (info.date.getMinutes() < 30 ? '00' : '30');
                             break;
                         case 'timeGridDay':
-                            // Week/Day view - Redirect to a page to add an event for the selected day and time
-                            const formattedDay = info.dateStr.slice(0, 10);  // Extract YYYY-MM-DD
+                            const formattedDay = info.dateStr.slice(0, 10);
                             window.location.href = '/create-event?' +
                                 'start_date=' + formattedDay +
-                                '&time=' + hours + ':' + minutes;
+                                '&time=' + info.date.getHours() + ':' + (info.date.getMinutes() < 30 ? '00' : '30');
                             break;
+                        default:
+                            // Handle other views as needed
+                    }
+                },
+                eventClick: function(info) {
+                    console.log('!!!Event clicked!!!:', info);
+                    console.log('!!!Event Object!!!:', info.event);
+                    const event_id = info.event.extendedProps.event_id;
+                    switch (info.view.type) {
+                        case 'dayGridMonth':
+                            window.location.href = '/edit-event/' + event_id;
+                            break;
+                        case 'timeGridWeek':
+                            window.location.href = '/edit-event/' + event_id;
+                            break;
+                        case 'timeGridDay':
+                            window.location.href = '/edit-event/' + event_id;
+                            break;
+                        case 'listMonth':
+                            window.location.href = '/edit-event/' + event_id;
+                            break;
+                            
+                                // Handle other views as needed
                         default:
                             // Handle other views as needed
                     }
@@ -90,15 +111,9 @@ document.addEventListener('DOMContentLoaded', function() {
             calendar.render();
         } else {
             console.error('User preferences not available.');
-            // Handle the case when user preferences are not available
         }
     })
     .catch(error => {
         console.error('Error fetching user preferences:', error);
-        // Handle the error scenario
     });
 });
-
-
-
-
