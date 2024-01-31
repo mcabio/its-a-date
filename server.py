@@ -24,6 +24,14 @@ def homepage():
     """View homepage"""
     return render_template('homepage.html')
 
+@app.route('/api/login-status')
+def login_status():
+    if 'current_user' in session:
+        return jsonify({'logged_in': True, 'username': session['current_user'], 'user_id': session['user_id']})
+    else:
+        return jsonify({'logged_in': False})
+    
+
 
 @app.route('/login', methods=['POST', 'GET'])
 def login():
@@ -228,8 +236,8 @@ def your_events():
     except Exception as e:
         print("Error:", str(e))
         # return jsonify({"error": str(e)}), 500
-
-    return render_template('my-events.html', events_data=events_data)
+    user = crud.get_user_by_id(user_id)
+    return render_template('my-events.html', user=user, events_data=events_data)
 
 
 

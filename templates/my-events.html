@@ -5,7 +5,9 @@
 {% block body %}
     <h1>My agenda!</h1>
 
-    <div class="d-flex flex-wrap">
+
+
+    <div class="d-flex flex-wrap mx-auto">
         {% set sorted_events_data = events_data|sort(attribute='start_date') %}
         {% set rendered_months = [] %}
 
