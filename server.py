@@ -256,9 +256,6 @@ def create_event():
     if request.method == "GET":
         return render_template('create-event.html')
 
-    username = session['current_user']
-    user = crud.get_user_by_username(username)
-
     title = request.form.get("title")
     description = request.form.get("description")
     start_date_str = request.form.get("start_date")

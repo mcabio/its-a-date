@@ -23,7 +23,8 @@
         End time <input type="time" name="end_time" value="{{ end_time }}">
     </p>
 
-    <input type="submit" value="Update Event">
+    <input type="submit" class="btn btn-outline-danger" value="Update">
+    <a type="button" class="btn btn-outline-danger" href="/delete-event/{{ event.event_id }}">Delete</a>
 </form>
 
 {% endblock body %}

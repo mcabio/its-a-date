@@ -22,7 +22,8 @@ function Navbar() {
     }
 
     return (
-    <nav className="navbar navbar-expand-lg bg-dark border-bottom border-body" data-bs-theme="dark">
+    // <nav className="navbar navbar-expand-lg bg-dark border-bottom border-body" data-bs-theme="dark">
+    <nav className="navbar navbar-expand-lg" style={{ backgroundColor: 'rgb(50, 35, 85)', borderBottom: '1px solid #322355' }}>
 
         <a className="navbar-brand">
         {isLoggedIn ? `Logged in as: ${username}` : null}

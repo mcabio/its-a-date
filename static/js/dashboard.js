@@ -49,7 +49,7 @@ document.addEventListener('DOMContentLoaded', function() {
                                 end: event.end_date + (event.end_time ? 'T' + event.end_time : ''),
                                 allDay: false,
                                 extendedProps: {
-                                    event_id: event.event_id,  // Your unique identifier for the event
+                                    event_id: event.event_id,  // Unique identifier for the event
                                     // ... other additional properties
                                 }
                             }));

@@ -1,275 +1,12 @@
-body {
-  margin: 0;
-  font-family: var(--bs-body-font-family);
-  font-size: var(--bs-body-font-size);
-  font-weight: var(--bs-body-font-weight);
-  line-height: var(--bs-body-line-height);
-  color: rgba(122, 42, 220, 0.865);
-  text-align: var(--bs-body-text-align);
-}
+/* Color pallete: 
 
-/* CSS for calendar */
-
-html, body {
-    margin: 5;
-    padding: 0;
-    font-family: Arial, Helvetica Neue, Helvetica, sans-serif;
-    font-size: 14px;
-    color: rgb(221, 149, 226) /*Font color for headers*/
-  }
-
-  .fc-list-event-time {
-    display: none;
-  }
-
-  .fc-h-event .fc-event-title {
-    font-size: 11px;
-  }
-
-  .calendar-container {
-    padding-top: 10px;
-    justify-content: center;
-    height: calc(100vh - 190px);
-  }
-
- 
-
-  #calendar a {
-    color: #f8c0ff;   /* Font color of calendar month view */
-  }
-
-  #available-cal a {
-    color: #f8c0ff;   /* Font color of calendar month view */
-  }
-
-  #calendar .fc-button-primary {
-    background-color: rgb(62, 23, 110);
-    border: 50px solid rgb(160, 122, 203);
-  }
-
-  #calendar .fc-button-primary:hover {
-    background-color: rgb(48,48,48);
-    border: 1px solid rgb(48,48,48);
-  }
-
-  #calendar {
-    max-width: 800px;
-    margin: 10px auto;
-    color: rgb(194, 161, 255);
-  }
-
-  
-
-  /* Dashboard calendar button color  */
-  #calendar .fc-button-primary {
-    background-color: rgba(84, 41, 185, 0.74);
-    border: 1px solid rgba(84, 41, 185, 0.74);
-  }
-
-  /* Availability calendar button color  */
-
-  #available-cal .fc-button-primary {
-    background-color: rgba(84, 41, 185, 0.74);
-    border: 10px solid rgb(6, 6, 1);
-  }
-
-  /* Button color hover */
-  #calendar .fc-button-primary:hover {
-    background-color: rgb(178, 157, 233);
-    border: 1px solid rgb(178, 157, 233);
-  }
-
-
-  /* Font color of availability month view*/
-  #available-cal a {
-    color: rgb(178, 156, 229);
-  }
-
-  #available-cal .fc-button-primary {
-    background-color: rgb(232, 25, 243);
-    border: 1px solid dimgray;
-  }
-  
-  #available-cal .fc-button-primary:hover {
-    background-color: rgb(48,48,48);
-    border: 1px solid rgb(48,48,48);
-  }
-
-  #available-cal {
-    max-width: 800px;
-    margin: 10px auto;
-    color: black;
-  }
-
-
-  /* Button color  */
-  #available-cal .fc-button-primary {
-    background-color: rgba(84, 41, 185, 0.74);
-    border: 1px solid rgb(6, 6, 1);
-  }
-
-  /* Button color hover */
-  #available-cal .fc-button-primary:hover {
-    background-color: rgb(199, 18, 209);
-    border: 1px solid rgb(28, 4, 90);
-  }
-
-  .modal-body {
-    text-align: center;
-  }
-  .btn-sm {
-    margin: .125rem;
-  }
-  .modal-up {
-    border-color: rgb(178, 9, 164);
-    font-size: 1rem;
-  }
-  .modal-down {
-    border-color: white;
-    font-size: 1rem;
-  }
-  
-  
-.create-event {
-    color: rgba(28, 3, 3, 0.973);
-    background-color: rgb(177, 164, 164);
-    border: 1px solid black;
-    border-radius: 5px;
-    font-size: 24px;
-  }
-
-  /* Grid month CSS */
-.fc-list-event-time {
-    display: none;
-  }
-
-.fc-h-event .fc-event-title {
-    font-size: 11px;
-  }
-.calendar-container {
-    padding-top: 10px;
-    justify-content: center;
-    height: calc(100vh - 190px);
-  }
-
-
-element.style {
-    height: 250px;
-}
-   
-
-
-
-/* Full Calendar */
-  :root {
-    --fc-daygrid-event-dot-width: 8px; /* Day grid dot next to event*/
-    --fc-list-event-dot-width: 8px;     /* Month list dot next to event */
-    --fc-list-event-hover-bg-color: #9677d8; /* Month list date hover */
-    --fc-small-font-size: .85em; /* Font size of event on month calendar */
-    --fc-page-bg-color: #df1fdffe; /* Outline of box for multi-day event */
-    --fc-neutral-bg-color: rgb(53, 21, 94); /*Month list background panel for date and day*/
-    --fc-neutral-text-color: #2cd94e; /* Month list date and day font color */
-    --fc-border-color: rgb(173, 138, 219); /* The outline (grid) color of the calendars */
-  
-    --fc-button-text-color: #ceb1ea; /*Font of buttons above calendars*/
-    --fc-button-bg-color: #7676ed;
-    --fc-button-border-color: #2C3E50;
-    --fc-button-hover-bg-color: #1e2b37;
-    --fc-button-hover-border-color: #1a252f;
-    --fc-button-active-bg-color: #1a252f;
-    --fc-button-active-border-color: #151e27;
-  
-    --fc-event-bg-color: #3ad837;
-    --fc-event-border-color: #3788d8;
-    --fc-event-text-color: #32cb03;
-    --fc-event-selected-overlay-color: rgba(232, 59, 114, 0.927);
-  
-    --fc-more-link-bg-color: #d0d0d0;
-    --fc-more-link-text-color: inherit;
-  
-    --fc-event-resizer-thickness: 8px;
-    --fc-event-resizer-dot-total-width: 8px;
-    --fc-event-resizer-dot-border-width: 1px;
-  
-    --fc-non-business-color: rgba(215, 215, 215, 0.3);
-    --fc-bg-event-color: #ab690df1;
-    --fc-bg-event-opacity: 0.3;
-    --fc-highlight-color: rgba(200, 61, 128, 0.92);
-    --fc-today-bg-color: rgba(77, 61, 116, 0.95); /* Color of cell for today's day */
-    --fc-now-indicator-color: rgb(241, 66, 247);
-  }
-
-
-
-  /* my-events view.*/
-  
-  /* Bootstrap CSS */
-  .collapse {
-    &:not(.show) {
-      display: none;
-    }
-  }
-  
-  .collapsing {
-    height: 0;
-    overflow: hidden;
-    @include transition($transition-collapse);
-  
-    &.collapse-horizontal {
-      width: 0;
-      height: auto;
-      @include transition($transition-collapse-width);
-    }
-  }
-
-  .btn-primary {
-    background-color: #e01010; /* Red background for primary buttons */
-}
-
-  .btn-secondary {
-  background-color: indigo; /* Red background for primary buttons */
-}
-
-
-
-/* Custom CSS for a dark theme */
-.fc-theme-dark .fc-dayGridMonth-button, .fc-theme-dark .fc-timeGridWeek-button, .fc-theme-dark .fc-timeGridDay-button, .fc-theme-dark .fc-listMonth-button {
-  background-color: #455a70; /* Dark background for buttons */
-  color: #ffffff; /* Light text color for buttons */
-}
-
-.fc-theme-dark .fc-event {
-  background-color: #674d90; /* Event background color */
-  border-color: #eeff00; /* Event border color */
-  color: #ffffff; /* Event text color */
-}
-
-.fc-theme-dark .fc-day-header, .fc-theme-dark .fc-day, .fc-theme-dark .fc-list-day {
-  background-color: #343a40; /* Dark background for day headers and cells */
-  color: #ffffff; /* Light text color for day headers and cells */
-}
-
-.fc-theme-dark .fc-today {
-  background-color: #007bff; /* Background color for today's date */
-}
-
-.fc-theme-dark .fc-prev-button, .fc-theme-dark .fc-next-button {
-  color: #ffffff; /* Light color for prev/next buttons */
-}
-
-.fc-theme-dark .fc-button-primary {
-  background-color: #007bff; /* Dark background for primary buttons */
-}
-
-.fc-theme-dark .fc-button-primary:hover {
-  background-color: #0056b3; /* Darker background on hover for primary buttons */
-}
-
-.fc-theme-dark .fc-button-primary:active {
-  background-color: #003366; /* Darker background when primary button is active */
-}
-
-/* Bootstrap */
+background color: rgb(50, 35, 85); or '#322355', DARK COLOR
+text: rgb(221, 149, 226) LIGHT COLOR
+more text: rgb(192, 160, 255); LIGHT COLOR
+more text: rgb(236, 233, 51); LIGHT COLOR
+buttons: rgb(53, 21, 94); 
+button background: #4d4985; DARK
+borders: rgb(232, 25, 243); LIGHT */ 
 
 
 body {
@@ -280,7 +17,78 @@ body {
   line-height: var(--bs-body-line-height);
   color: rgb(192, 160, 255); /* Font color for header: Let's start scheming and event text in my-events */
   text-align: center; /* Alignment for headers */
-  background-color: #353a40;
-  -webkit-text-size-adjust: 100%;
-  -webkit-tap-highlight-color: transparent;
+  background-color: rgb(50, 35, 85)
+}
+
+/* CSS for dashboard and availability */
+
+#calendar a {
+  color: rgb(236, 233, 51); /* Font color of calendar month view */
+}
+
+#available-cal a {
+  color: rgb(192, 160, 255);   /* Font color of calendar month view */
+}
+
+#calendar .fc-button-primary {            /* Buttons above calendar */
+  background-color: rgb(74, 52, 117);
+  border: 1px solid rgb(50, 35, 85);
+}
+
+#available-cal .fc-button-primary {       /* Buttons above calendar */
+  background-color: rgb(74, 52, 117);
+  border: 1px solid rgb(50, 35, 85);
+}
+
+
+#calendar .fc-button-primary:hover {     /* Buttons above calendar when hovered over */
+  background-color: rgb(50, 35, 85);
+  border: 1px solid rgb(192, 160, 255);
+}
+
+#available-cal .fc-button-primary:hover {  /* Buttons above calendar when hovered over */
+  background-color: rgb(50, 35, 85);
+  border: 1px solid rgb(192, 160, 255);
+}
+
+
+#calendar {       
+  max-width: 800px;           /* Calendar sizing */
+  margin: 10px auto;
+  color: rgb(221, 149, 226) /* Calendar header font color */
+}
+
+#available-cal {             /* Calendar sizing */
+  max-width: 800px;
+  margin: 10px auto;
+  color: rgb(221, 149, 226) /* Calendar header font color */
+}
+
+
+
+:root {
+  --fc-daygrid-event-dot-width: 8px; /* Day grid dot next to event*/
+  --fc-list-event-dot-width: 8px;     /* Month list dot next to event */
+  --fc-list-event-hover-bg-color: #4d4985; /* Month list date hover */
+  --fc-small-font-size: .85em; /* Font size of event on month calendar */
+  --fc-page-bg-color: #322355; /* Outline of box for multi-day event */
+  --fc-neutral-bg-color: rgb(50, 35, 85); /*Month list background panel for date and day*/
+  --fc-border-color: rgb(192, 160, 255); /* The outline (grid) color of the calendars */
+  --fc-button-text-color: #d3e01c; /*Font of buttons above calendars*/
+  --fc-today-bg-color: rgba(192, 160, 255, 0.313);  /* Color of cell for today's day */
+  --fc-event-border-color: #c943d6;
+}
+
+.btn-bd-primary {
+  --bs-btn-font-weight: 600;
+  --bs-btn-color: rgb(50, 35, 85);
+  --bs-btn-bg: var(--bd-violet-bg);
+  --bs-btn-border-color: var(--bd-violet-bg);
+  --bs-btn-hover-color: var(--bs-white);
+  --bs-btn-hover-bg: #{shade-color($bd-violet, 10%)};
+  --bs-btn-hover-border-color: #{shade-color($bd-violet, 10%)};
+  --bs-btn-focus-shadow-rgb: var(--bd-violet-rgb);
+  --bs-btn-active-color: var(--bs-btn-hover-color);
+  --bs-btn-active-bg: #{shade-color($bd-violet, 20%)};
+  --bs-btn-active-border-color: #{shade-color($bd-violet, 20%)};
 }
