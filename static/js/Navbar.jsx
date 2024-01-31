@@ -69,11 +69,15 @@ function Navbar() {
             </a>
   )}
         </li>
+        
       
       <form className="d-flex">
         <input className="form-control me-2" type="search" placeholder="Search" aria-label="Search" />
         <button className="btn btn-outline-success me-2" type="submit">Search</button>
       </form>
+      <li className="nav-item">
+            <a className="nav-link" href="/logout">Logout</a>
+        </li>
 
       
         </ul>
