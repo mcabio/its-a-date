@@ -9,6 +9,7 @@ from model import connect_to_db, db, Event, User
 from datetime import date, datetime, timedelta
 from sqlalchemy import func
 import crud
+import re
 
 from jinja2 import StrictUndefined
 
@@ -63,6 +64,106 @@ def login():
         return render_template('homepage.html')  # Render the login page instead of redirecting
 
 
+# @app.route('/search-by-dates', methods=["GET", "POST"])
+# def search_by_dates():
+#     """Search events by date range"""
+#     if request.method == "GET":
+#         return render_template('search-by-dates.html')  # Create a new HTML template for search form
+
+#     # Retrieve the start and end dates from the form
+#     start_date_str = request.form.get("start_date")
+#     end_date_str = request.form.get("end_date")
+
+#     # Convert the date strings to datetime objects
+#     start_date = datetime.strptime(start_date_str, "%Y-%m-%d").date()
+#     end_date = datetime.strptime(end_date_str, "%Y-%m-%d").date()
+
+#     # Query events within the specified date range
+#     events = Event.query.filter(Event.start_date.between(start_date, end_date)).all()
+
+#     return render_template('search-date-results.html', events=events)
+
+
+
+@app.route('/api/date-search', methods=["POST"])
+def search_by_dates():
+    """Search events by date range"""
+    start_date_str = request.json.get("start_date")
+    end_date_str = request.json.get("end_date")
+
+    if start_date_str is None or end_date_str is None:
+        return jsonify(error="Both start_date and end_date are required"), 400
+
+    try:
+        start_date = datetime.strptime(start_date_str, "%Y-%m-%d").date()
+        end_date = datetime.strptime(end_date_str, "%Y-%m-%d").date()
+    except ValueError as e:
+        return jsonify(error="Invalid date format"), 400
+
+    events = Event.query.filter(Event.start_date.between(start_date, end_date)).all()
+
+    # Convert events to a list of dictionaries
+    events_data = [event.as_dict() for event in events]
+
+    # Instead of rendering a new template, return the events as JSON
+    return jsonify(events=events_data)
+
+
+
+    # start_date_str = request.json.get("start_date")
+    # end_date_str = request.json.get("end_date")
+
+    # start_date = datetime.strptime(start_date_str, "%Y-%m-%d").date()
+    # end_date = datetime.strptime(end_date_str, "%Y-%m-%d").date()
+
+    # events = Event.query.filter(Event.start_date.between(start_date, end_date)).all()
+
+    # # Convert events to a list of dictionaries
+    # events_data = [event.as_dict() for event in events]
+
+    # # Instead of rendering a new template, return the events as JSON
+    # return jsonify(events=events_data)
+
+
+
+@app.route('/search-date-results', methods=["GET"])
+def search_date_results():
+    user_id = session.get('user_id')
+
+    if user_id is None:
+        # Assuming you are using Flask-Login
+        return jsonify({"error": "User not authenticated"}), 401
+
+    try:
+        events = crud.get_events_by_user_id(user_id)
+
+        # Filter out deleted events
+        events = [event for event in events if event.deleted_on is None]
+
+        # Convert events to a list of dictionaries
+        events_data = []
+        for event in events:
+            events_data.append({
+                "event_id": event.event_id,
+                "title": event.title,
+                "description": event.description,
+                "month": event.start_date.strftime('%B'),
+                "start_date": event.start_date.strftime('%m-%d-%y'),
+                "start_time": event.start_time.strftime('%I:%M %p') if event.start_time else None,
+                "end_date": event.end_date.strftime('%m-%d-%y'),
+                "end_time": event.end_time.strftime('%I:%M %p') if event.end_time else None,
+            })
+
+    except Exception as e:
+        print("Error:", str(e))
+        # You may want to handle the error appropriately
+        return jsonify({"error": str(e)}), 500
+
+    user = crud.get_user_by_id(user_id)
+    return render_template('search-date-results.html', user=user, events_data=events_data)
+
+
+
 
 @app.route('/new-user', methods=["GET", "POST"])
 def register_user():
@@ -78,13 +179,22 @@ def register_user():
     day_start_time = request.form.get("day_start_time")
     day_end_time = request.form.get("day_end_time")
 
+    # Check for empty fields
+    if any(field is None or field == '' for field in [email, password, username, fname, lname, day_start_time, day_end_time]):
+        flash("Invalid inputs, please try again.")
+        return redirect('/new-user')
+    
+    if not re.match(r"[^@]+@[^@]+\.[^@]+", email):
+        flash("Invalid email format, please try again.")
+        return redirect('/new-user')
+
     hashed_password = argon2.hash(password)
 
     user = crud.get_user_by_email(email)
 
     if user:
-        flash("Cannot create an account with that email. Try again")
-        return render_template('new-user.html')
+        flash("Cannot create an account with that email. Try again.")
+        return redirect('/new-user')
     else:
         user = crud.create_user(email, 
                                 hashed_password,
@@ -93,14 +203,12 @@ def register_user():
                                 lname, 
                                 day_start_time, 
                                 day_end_time)
-        
-        session['current_user'] = username
-        session['user_id'] = user.user_id
 
         db.session.add(user)
         db.session.commit()
         flash("Welcome! Please log in.")
         return redirect('/')
+
     
 @app.route('/user-preferences', methods=["GET"])
 def user_preferences():
@@ -207,7 +315,7 @@ def dashboard():
 
 @app.route('/my-events', methods=["GET", "POST"])
 def your_events():
-    # Assuming you have the user_id in the session
+
     user_id = session.get('user_id')
     
     if user_id is None:

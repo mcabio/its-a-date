@@ -61,6 +61,19 @@ class Event(db.Model):
     recurring = db.relationship('RecurringPattern', uselist=False, back_populates='event')
     notifications = db.relationship('Notification', back_populates='event')
 
+    def as_dict(self):
+        return {
+            'event_id': self.event_id,
+            'user_id': self.user_id,
+            'title': self.title,
+            'description': self.description,
+            'start_date': self.start_date.strftime('%Y-%m-%d') if self.start_date else None,
+            'start_time': self.start_time.strftime('%H:%M:%S') if self.start_time else None,
+            'end_date': self.end_date.strftime('%Y-%m-%d') if self.end_date else None,
+            'end_time': self.end_time.strftime('%H:%M:%S') if self.end_time else None,
+            # Add other fields as needed
+        }
+
     def __repr__(self):
         return f'<Event: {self.title} | event_id = {self.event_id} | Scheduled on {self.start_date} by {self.users.username}>'
     

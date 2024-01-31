@@ -1,0 +1,16 @@
+{% extends 'base.html' %}
+{% block title %} Search Events {% endblock %}
+{% block body %}
+
+<form action="/search-by-dates" method="POST">
+    <div class="input-group">
+      <span class="input-group-text">Events between</span>
+      <input type="date" aria-label="Start range" class="form-control" name="start_date" required>
+      <input type="date" aria-label="End range" class="form-control" name="end_date" required>
+      <input type="submit" value="Search">
+    </div>
+</form>
+
+  
+
+{% endblock body %}

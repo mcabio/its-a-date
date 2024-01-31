@@ -1,0 +1,171 @@
+body {
+  margin: 0;
+  font-family: var(--bs-body-font-family);
+  font-size: var(--bs-body-font-size);
+  font-weight: var(--bs-body-font-weight);
+  line-height: var(--bs-body-line-height);
+  color: rgba(122, 42, 220, 0.865);
+  text-align: var(--bs-body-text-align);
+}
+
+/* CSS for calendar */
+
+
+  .fc-list-event-time {
+    display: none;
+  }
+
+  .fc-h-event .fc-event-title {
+    font-size: 11px;
+  }
+
+  .calendar-container {
+    padding-top: 10px;
+    justify-content: center;
+    height: calc(100vh - 190px);
+  }
+
+ 
+
+
+
+
+
+
+
+
+
+  .modal-body {
+    text-align: center;
+  }
+  .btn-sm {
+    margin: .125rem;
+  }
+  .modal-up {
+    border-color: rgb(178, 9, 164);
+    font-size: 1rem;
+  }
+  .modal-down {
+    border-color: white;
+    font-size: 1rem;
+  }
+  
+  
+.create-event {
+    color: rgba(28, 3, 3, 0.973);
+    background-color: rgb(177, 164, 164);
+    border: 1px solid black;
+    border-radius: 5px;
+    font-size: 24px;
+  }
+
+  /* Grid month CSS */
+.fc-list-event-time {
+    display: none;
+  }
+
+
+
+
+
+element.style {
+    height: 250px;
+}
+   
+
+
+
+/* Full Calendar */
+  :root {
+
+
+    
+    --fc-button-active-border-color: #151e27;
+    --fc-event-bg-color: #3ad837;
+    
+
+
+    --fc-more-link-bg-color: #d0d0d0;
+    --fc-more-link-text-color: inherit;
+    --fc-event-resizer-thickness: 8px;
+    --fc-event-resizer-dot-total-width: 8px;
+    --fc-event-resizer-dot-border-width: 1px;
+    --fc-non-business-color: rgba(215, 215, 215, 0.3);
+    --fc-bg-event-color: #ab690df1;
+    --fc-bg-event-opacity: 0.3;
+    --fc-highlight-color: rgba(200, 61, 128, 0.92);
+    --fc-now-indicator-color: rgb(241, 66, 247);
+  }
+
+
+
+  /* my-events view.*/
+  
+  /* Bootstrap CSS */
+  .collapse {
+    &:not(.show) {
+      display: none;
+    }
+  }
+  
+  .collapsing {
+    height: 0;
+    overflow: hidden;
+    @include transition($transition-collapse);
+  
+    &.collapse-horizontal {
+      width: 0;
+      height: auto;
+      @include transition($transition-collapse-width);
+    }
+  }
+
+  .btn-primary {
+    background-color: #e01010; /* Red background for primary buttons */
+}
+
+  .btn-secondary {
+  background-color: indigo; /* Red background for primary buttons */
+}
+
+
+
+/* Custom CSS for a dark theme */
+.fc-theme-dark .fc-dayGridMonth-button, .fc-theme-dark .fc-timeGridWeek-button, .fc-theme-dark .fc-timeGridDay-button, .fc-theme-dark .fc-listMonth-button {
+  background-color: #455a70; /* Dark background for buttons */
+  color: #ffffff; /* Light text color for buttons */
+}
+
+.fc-theme-dark .fc-event {
+  background-color: #674d90; /* Event background color */
+  border-color: #eeff00; /* Event border color */
+  color: #ffffff; /* Event text color */
+}
+
+.fc-theme-dark .fc-day-header, .fc-theme-dark .fc-day, .fc-theme-dark .fc-list-day {
+  background-color: #343a40; /* Dark background for day headers and cells */
+  color: #ffffff; /* Light text color for day headers and cells */
+}
+
+.fc-theme-dark .fc-today {
+  background-color: #007bff; /* Background color for today's date */
+}
+
+.fc-theme-dark .fc-prev-button, .fc-theme-dark .fc-next-button {
+  color: #ffffff; /* Light color for prev/next buttons */
+}
+
+.fc-theme-dark .fc-button-primary {
+  background-color: #007bff; /* Dark background for primary buttons */
+}
+
+.fc-theme-dark .fc-button-primary:hover {
+  background-color: #0056b3; /* Darker background on hover for primary buttons */
+}
+
+.fc-theme-dark .fc-button-primary:active {
+  background-color: #003366; /* Darker background when primary button is active */
+}
+
+/* Bootstrap */
+
