@@ -21,6 +21,12 @@ function Navbar() {
       return null;
     }
   
+  
+    function formatDate(dateString) {
+      const [year, month, day] = dateString.split('-');
+      return `${month}-${day}-${year.slice(-2)}`;
+    }
+  
     return (
       <nav className="navbar navbar-expand-lg" style={{ backgroundColor: 'rgb(50, 35, 85)', borderBottom: '1px solid #322355' }}>
         <a className="navbar-brand">
@@ -106,18 +112,19 @@ function Navbar() {
                 <button type="button" className="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
               </div>
               <div className="modal-body">
-                <form action="/api/date-search" method="POST">
+                <form action="/search-date-results" method="GET">
                   <div className="input-group">
                     <span className="input-group-text">Events between</span>
                     <input type="date" id="start_date" aria-label="Start range" className="form-control" name="start_date" required />
                     <input type="date" id="end_date" aria-label="End range" className="form-control" name="end_date" required />
                   </div>
+                  <div className="modal-footer">
+                    <button type="submit" className="btn btn-outline-danger">Search</button>
+                  </div>
                 </form>
               </div>
-              <div className="modal-footer">
-                <button type="button" className="btn btn-outline-danger" onClick={handleDateSearch}>Search</button>
-              </div>
               
+  
             </div>
           </div>
         </div>
@@ -125,36 +132,4 @@ function Navbar() {
     );
   }
   
-  function handleDateSearch() {
-    const startDate = document.querySelector("#start_date").value;
-    const endDate = document.querySelector("#end_date").value;
-
-    fetch('/api/date-search', {
-        method: 'POST',
-        headers: {
-            'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({ start_date: startDate, end_date: endDate }),
-    })
-    .then(response => {
-        if (!response.ok) {
-            throw new Error(`HTTP error! Status: ${response.status}`);
-        }
-        return response.json();
-    })
-    .then(data => {
-        // You can update the modal content or handle the results here
-        console.log('!!!!!THIS IS THE DATA!!!!!:', data);
-
-        // Redirect to the search results page with events data
-        window.location.href = '/search-date-results';
-    })
-    .catch(error => {
-        console.error('Error:', error);
-        // Optionally, you can handle the error and provide feedback to the user
-        alert('Error fetching search results. Please try again.');
-    });
-}
-  
   ReactDOM.render(<Navbar />, document.querySelector('#app'));
-  
