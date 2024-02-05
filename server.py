@@ -7,7 +7,7 @@ from werkzeug.security import check_password_hash
 from passlib.hash import argon2
 from model import connect_to_db, db, Event, User
 from datetime import date, datetime, timedelta
-from sqlalchemy import and_
+from sqlalchemy import and_, or_
 import crud
 import re
 
@@ -68,6 +68,8 @@ def login():
 
 @app.route('/search-date-results', methods=["GET"])
 def search_date_results():
+    """Search by date range"""
+
 
     start_date_str = request.args.get("start_date")
     end_date_str = request.args.get("end_date")
@@ -89,6 +91,28 @@ def search_date_results():
 
     return render_template('search-date-results.html', user=user, results=results, no_events_message=no_events_message)
 
+
+
+@app.route('/search-title-results', methods=["GET"])
+def search_title_results():
+    """Search by event title"""
+
+    event_title = request.args.get("title")
+
+    user_id = session.get('user_id')
+
+    if user_id is None:
+        # Assuming you are using Flask-Login
+        return redirect('/')
+
+    # Using ilike for case-insensitive search
+    results = Event.query.filter(and_(or_(Event.title.ilike(f"%{event_title}%")), Event.user_id == user_id)).all()
+
+    user = crud.get_user_by_id(user_id)
+
+    no_events_message = "No events with the specified title or keywords, try again."
+
+    return render_template('search-title-results.html', user=user, results=results, no_events_message=no_events_message)
 
 
 
@@ -381,48 +405,6 @@ def publish_event():
 
 
 
-
-# @app.route('/api/availability', methods=['GET'])
-# def api_availability():
-
-#     user_id = session['user_id']
-
-#     start_str = request.args.get('start')
-#     end_str = request.args.get('end')
-#     print(f'!!!!!THIS IS THE START_STR!!!!!: {start_str}')
-#     print(f'!!!!!THIS IS THE END_STR!!!!!: {end_str}')
-
-#     month_start = datetime.fromisoformat(start_str)
-#     month_end = datetime.fromisoformat(end_str)
-
-#     # Query the database for events within the specified start and end dates and user_id
-#     events = Event.query.filter(
-#         Event.user_id == user_id,
-#         Event.start_date.between(month_start.date(), month_end.date()),
-#         Event.deleted_on.is_(None)
-#     ).all()
-
-
-#     # Extract the dates with events
-#     dates_with_events = set()
-#     for event in events:
-#     # Include all dates within the range of the event
-#         event_dates = [event.start_date + timedelta(n) for n in range((event.end_date - event.start_date).days + 1)]
-#     dates_with_events.update(event_dates)
-#     print(f'!!!!!THESE ARE THE DAYS WITH EVENTS!!!!!: {dates_with_events}')
-
-#     # Calculate the days without events in the given month
-#     days_without_events = [date for date in (month_start + timedelta(n) for n in range((month_end - month_start).days + 1))
-#                            if date.date() not in dates_with_events]
-#     print(f'!!!!!THESE ARE THE DAYS WITHOUT EVENTS!!!!!: {days_without_events}')
-
-#     # Format the dates in the desired format (e.g., '2022-01-01')
-#     days_available = [date.strftime('%Y-%m-%d') for date in days_without_events]
-#     print(f'!!!THESE ARE DAYS AVAILABLE!!!: {days_available}')
-
-#     available_data = {'availability': days_available}
-#     print(available_data)
-#     return jsonify(available_data)
 
 @app.route('/api/availability', methods=['GET'])
 def api_availability():

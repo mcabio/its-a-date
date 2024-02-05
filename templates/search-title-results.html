@@ -1,0 +1,29 @@
+{% extends 'base.html' %}
+
+{% block title %}It's A Date!{% endblock %}
+
+{% block body %}
+    <h1>Search Results</h1>
+
+
+    <div class="list-group">
+        {% if results %}
+        {% for data in results %}
+            {% set event_title = data.title %}
+        <a href="/edit-event/{{ data.event_id }}" class="list-group-item list-group-item-action" aria-current="true">
+          <div class="d-flex w-100 justify-content-between">
+            <h5 class="mb-1">{{ event_title }}</h5>
+          </div>
+          <p class="mb-1">Description: {{ data.description }}</p>
+          <small>Start Date: {{ data.start_date }}<br>
+            Start time: {{ data.start_time }}<br>
+            End Date: {{ data.end_date }}<br>
+            End time: {{ data.end_time }}<br></small>
+        </a>
+        
+            {% endfor %}
+        {% else %}
+            <p>{{ no_events_message }}</p>
+        {% endif %}
+    </div>
+{% endblock %}
