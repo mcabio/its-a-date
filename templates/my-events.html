@@ -38,14 +38,14 @@
                             End time: {{data.end_time}}<br>
                            
                             <!-- Edit button -->
-                            <a class="btn btn-outline-info" href="/edit-event/{{ data.event_id }}" role="button">Edit</a>
+                            <a class="btn btn-outline-dark" href="/edit-event/{{ data.event_id }}" role="button">Edit</a>
 
 
 
 
                             <!-- Delete button trigger modal -->
                             <button type="button" 
-                                    class="btn btn-outline-danger"
+                                    class="btn btn-outline-dark"
                                     data-bs-toggle="modal" 
                                     data-bs-target="#staticBackdrop{{ data.event_id }}">Delete
                             </button>
@@ -69,8 +69,8 @@
                                 Do you want to proceed?
                                 </div>
                             <div class="modal-footer">
-                                <button type="button" class="btn btn-outline-info" data-bs-dismiss="modal">Cancel</button>
-                                <a type="button" class="btn btn-outline-danger" href="/delete-event/{{ data.event_id }}">Delete</a>
+                                <button type="button" class="btn btn-outline-dark" data-bs-dismiss="modal">Cancel</button>
+                                <a type="button" class="btn btn-outline-dark" href="/delete-event/{{ data.event_id }}">Delete</a>
                             </div>
                             </div>
                             </div>

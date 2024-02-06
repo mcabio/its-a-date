@@ -5,6 +5,7 @@
 {% block body %}
     <h1>Search Results</h1>
 
+
     <div class="d-flex flex-wrap mx-auto">
         {% if results %}
             {% set rendered_months = [] %}
@@ -37,11 +38,11 @@
                                 End time: {{ data.end_time }}<br>
 
                                 <!-- Edit button -->
-                                <a class="btn btn-outline-info" href="/edit-event/{{ data.event_id }}" role="button">Edit</a>
+                                <a class="btn btn-outline-dark" href="/edit-event/{{ data.event_id }}" role="button">Edit</a>
 
                                 <!-- Delete button trigger modal -->
                                 <button type="button" 
-                                        class="btn btn-outline-danger"
+                                        class="btn btn-outline-dark"
                                         data-bs-toggle="modal" 
                                         data-bs-target="#staticBackdrop{{ data.event_id }}">Delete
                                 </button>

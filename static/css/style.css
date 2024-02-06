@@ -6,24 +6,68 @@ more text: rgb(192, 160, 255); LIGHT COLOR
 more text: rgb(236, 233, 51); LIGHT COLOR
 buttons: rgb(53, 21, 94); 
 button background: #4d4985; DARK
-borders: rgb(232, 25, 243); LIGHT */ 
+borders: rgb(232, 25, 243); LIGHT 
+
+Potential:
+DARK COLORS
+Background purple: #433c5e
+Another dark purple: rgb(50, 35, 85); or '#322355'
+Purple: #4d4985;
+Another purple: #54478C;
+Russian Violet: #2F1847
+
+LIGHT COLORS: 
+Muted pink: #b98eb1
+Lavender: rgb(192, 160, 255);
+Light lavender: #AAA1C8
+Peach: #ebc1d2
+Bright pink: rgb(232, 25, 243); 
+Easter yellow: #fffde0
+Bright yellow: #fefa99
+
+*/ 
 
 
 body {
   margin: 0;
+  padding-top: 30px;
   font-family: var(--bs-body-font-family);
   font-size: var(--bs-body-font-size);
   font-weight: var(--bs-body-font-weight);
   line-height: var(--bs-body-line-height);
-  color: rgb(192, 160, 255); /* Font color for header: Let's start scheming and event text in my-events */
+  color: rgb(221, 149, 226);  /* Font color for header: Let's start scheming and event text in my-events */
   text-align: center; /* Alignment for headers */
-  background-color: rgb(50, 35, 85)
+  background-color: #433c5e; /*THIS NEEDS TO BE DARK*/
+
+.btn-outline-light {
+  color: rgb(50, 35, 85); 
+  background: #b98eb1; 
+  transition: 0.5s color ease;
+}
+
+.btn-outline-light:hover {
+  color: #b98eb1; 
+  background: #433c5e;
+  text-decoration: none;
+}
+
+.btn-outline-dark {
+  color: #b98eb1;
+  background: #433c5e;
+  transition: 0.5s color ease;
+}
+
+.btn-outline-dark:hover {
+  color: rgb(50, 35, 85); /*THIS NEEDS TO BE DARK*/
+  background: #AAA1C8;
+  text-decoration: none;
 }
 
 /* CSS for dashboard and availability */
 
 #calendar a {
-  color: rgb(236, 233, 51); /* Font color of calendar month view */
+  color: #fefa99; /* LIGHT Font color of calendar month view */
+  
 }
 
 #available-cal a {
@@ -55,6 +99,7 @@ body {
 #calendar {       
   max-width: 800px;           /* Calendar sizing */
   margin: 10px auto;
+  background: rgb(50, 35, 85);
   color: rgb(221, 149, 226) /* Calendar header font color */
 }
 
@@ -75,7 +120,7 @@ body {
   --fc-neutral-bg-color: rgb(50, 35, 85); /*Month list background panel for date and day*/
   --fc-border-color: rgb(192, 160, 255); /* The outline (grid) color of the calendars */
   --fc-button-text-color: #d3e01c; /*Font of buttons above calendars*/
-  --fc-today-bg-color: rgba(192, 160, 255, 0.313);  /* Color of cell for today's day */
+  --fc-today-bg-color: rgb(192, 160, 255);  /* Color of cell for today's day */
   --fc-event-border-color: #c943d6;
 }
 

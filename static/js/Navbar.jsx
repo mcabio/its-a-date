@@ -23,7 +23,8 @@ function Navbar() {
   
     return (
       <>
-        <nav className="navbar navbar-expand-lg" style={{ backgroundColor: 'rgb(50, 35, 85)', borderBottom: '1px solid #322355' }}>
+      <div style={{ marginTop: '56px' }}>
+        <nav className="navbar navbar-expand-lg fixed-top" style={{ backgroundColor: '#433c5e', borderBottom: '1px solid #433c5e' }}>
           <a className="navbar-brand">
             {isLoggedIn ? `Logged in as: ${username}` : null}
           </a>
@@ -144,6 +145,7 @@ function Navbar() {
               </div>
             </div>
           </div>
+        </div>
         </div>
       </>
     );
