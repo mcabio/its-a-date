@@ -12,7 +12,7 @@
             {% set event_title = data.title %}
         <a class="list-group-item list-group-item-action" aria-current="true">
           <div class="d-flex w-100 justify-content-between">
-            <h5 class="mb-1">{{ event_title }}</h5>
+            <h5 class="mb-1 text-center">{{ event_title }}</h5>
           </div>
           <p class="mb-1">Description: {{ data.description }}</p>
           <small>Start Date: {{ data.start_date }}<br>
@@ -25,7 +25,7 @@
 
             <!-- Delete button trigger modal -->
             <button type="button" 
-                    class="btn btn-outline-danger"
+                    class="btn btn-outline-dark"
                     data-bs-toggle="modal" 
                     data-bs-target="#staticBackdrop{{ data.event_id }}">Delete
             </button>

@@ -61,6 +61,10 @@ body {
   background: #b98eb1; 
   border: 1.5px solid rgb(50, 35, 85); 
   transition: 0.5s color ease;
+  margin-right: 10px; 
+  margin-left: 10px; 
+  margin-top: 5px;
+  margin-bottom: 5px; 
 }
 
 .btn-outline-light:hover {
@@ -68,13 +72,21 @@ body {
   background: #433c5e;
   border: 1.5px solid #b98eb1;
   text-decoration: none;
+  margin-right: 10px; 
+  margin-left: 10px; 
+  margin-top: 5px;
+  margin-bottom: 5px; 
 }
 
 .btn-outline-dark {
-  color: #b98eb1;
+  color: #ebc1d2;
   background: #433c5e;
   border: 1.5px solid #b98eb1;
   transition: 0.5s color ease;
+  margin-right: 10px; 
+  margin-left: 10px; 
+  margin-top: 5px;
+  margin-bottom: 5px; 
 }
 
 .btn-outline-dark:hover {
@@ -82,7 +94,56 @@ body {
   background: #b98eb1;
   border: 1.5px solid rgb(50, 35, 85);
   text-decoration: none;
+  margin-right: 10px; 
+  margin-left: 10px; 
+  margin-top: 5px;
+  margin-bottom: 5px; 
 }
+
+.btn-outline-peach {
+  color: #322355;
+  background: #AAA1C8;
+  border: 1.5px solid #322355;
+  transition: 0.5s color ease;
+  margin-right: 10px; 
+  margin-left: 10px; 
+  margin-top: 5px;
+  margin-bottom: 5px; 
+}
+
+.btn-outline-peach:hover {
+  color: #AAA1C8;
+  background: #322355;
+  border: 1.5px solid #AAA1C8;
+  text-decoration: none;
+  margin-right: 10px; 
+  margin-left: 10px; 
+  margin-top: 5px;
+  margin-bottom: 5px; 
+}
+
+.btn-outline-lavender {
+  color: #AAA1C8;
+  background: #322355;
+  border: 1.5px solid #AAA1C8;
+  transition: 0.5s color ease;
+  margin-right: 10px; 
+  margin-left: 10px; 
+  margin-top: 5px;
+  margin-bottom: 5px; 
+}
+
+.btn-outline-lavender:hover {
+  color: #322355; /*THIS NEEDS TO BE DARK*/
+  background: #AAA1C8;
+  border: 1.5px solid #322355;
+  text-decoration: none;
+  margin-right: 10px; 
+  margin-left: 10px; 
+  margin-top: 5px;
+  margin-bottom: 5px; 
+}
+
 
 .nav-link {
   color: #b98eb1;
@@ -96,26 +157,91 @@ body {
 }
 
 .dropdown-menu {
-  color: #b98eb1;
-  background: #433c5e;
-  border: 1.5px solid #b98eb1;
-  transition: 0.5s color ease;
-}
-
-.dropdown-menu:hover {
   color: #b98eb1;/*THIS NEEDS TO BE DARK*/
   background: #b98eb1;
   border: 1.5px solid #433c5e;
   text-decoration: none;
 }
 
+.dropdown-menu:hover {
+  color: #433c5e;
+  background: #433c5e;
+  border: 1.5px solid #b98eb1;
+  transition: 0.5s color ease;
+}
+
 .dropdown-menu .dropdown-item {
-  background: #433c5e;  /* Customize this with your desired background color */
+  background: #b98eb1;
 }
 
 .dropdown-menu .dropdown-item:hover {
-  background-color: #b98eb1;/* Customize this with your desired hover background color */
+  background-color: #433c5e; 
 }
+
+/* MODALS! */
+
+.modal-dialog {
+  background: #54478C; /* Modal outline color*/
+  color: #2F1847 /* Modal heading font color*/
+}
+
+.modal-content {
+  background: #b98eb1; /* Modal outline color*/
+  color: #2F1847 /* Modal heading font color*/
+}
+
+.modal-header {
+  background: #b98eb1; /* Modal header color*/
+  color: #433c5e;   /* Modal heading font color*/
+}
+
+.modal-body {
+  background: #b98eb1; /* Modal square background color*/
+  color: #433c5e;
+}
+
+.input-group {
+  background: #433c5e; /* Modal square background color*/
+  color: #d2cb07;
+}
+
+.input-group-text {
+  background: #433c5e;/* Modal square background color*/
+  color: #ebc1d2
+}
+
+.row {
+  color: #AAA1C8 /* Font color of collapse */
+}
+
+.card {
+  color:  #AAA1C8;
+  background: rgb(50, 35, 85);
+  border: 1.5px solid #b98eb1; /* Modal border color*/
+}
+
+.list-group {
+  color:  #AAA1C8; /* Modal border color*/    
+  padding-left: 400px;  /* Adjust left padding */
+  padding-right: 400px; /* Adjust right padding */
+}
+
+.list-group-item {
+  color: #AAA1C8;
+  background: rgb(50, 35, 85);
+  border: 1.5px solid #ebc1d2; /* Modal border color*/
+}
+
+.mb-1 {
+  text-align: center;
+}
+
+.list-group-item:hover {
+  color: #AAA1C8;
+  background: rgb(50, 35, 85);
+  border: 1.5px solid #ebc1d2; /* Modal border color*/
+}
+
 
 
 

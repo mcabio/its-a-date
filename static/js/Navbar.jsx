@@ -135,7 +135,7 @@ function Navbar() {
                     <input type="date" id="end_date" aria-label="End range" className="form-control" name="end_date" required />
                   </div>
                   <div className="modal-footer">
-                    <button type="submit" className="btn btn-outline-danger">Search</button>
+                    <button type="submit" className="btn btn-outline-dark">Search</button>
                   </div>
                 </form>
               </div>
@@ -158,7 +158,7 @@ function Navbar() {
                     <input type="text" id="title" aria-label="Event Title" className="form-control" name="title" required />
                   </div>
                   <div className="modal-footer">
-                    <button type="submit" className="btn btn-outline-danger">Search</button>
+                    <button type="submit" className="btn btn-outline-dark">Search</button>
                   </div>
                 </form>
               </div>
