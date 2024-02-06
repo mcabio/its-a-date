@@ -100,7 +100,7 @@ body {
   margin-bottom: 5px; 
 }
 
-.btn-outline-peach {
+.btn-outline-secondary {
   color: #322355;
   background: #AAA1C8;
   border: 1.5px solid #322355;
@@ -111,7 +111,7 @@ body {
   margin-bottom: 5px; 
 }
 
-.btn-outline-peach:hover {
+.btn-outline-secondary:hover {
   color: #AAA1C8;
   background: #322355;
   border: 1.5px solid #AAA1C8;
