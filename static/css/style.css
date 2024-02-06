@@ -27,6 +27,19 @@ Bright yellow: #fefa99
 
 */ 
 
+:root {
+  --fc-daygrid-event-dot-color: #fefa99;
+  --fc-daygrid-event-dot-width: 8px; /* Day grid dot next to event*/
+  --fc-list-event-dot-width: 8px;     /* Month list dot next to event */
+  --fc-list-event-hover-bg-color: #4d4985; /* Month list date hover */
+  --fc-small-font-size: .85em; /* Font size of event on month calendar */
+  --fc-page-bg-color: #ebc1d2; /* Outline of box for multi-day event. #322355; */
+  --fc-neutral-bg-color: rgb(50, 35, 85);/*Month list background panel for date and day*/
+  --fc-border-color: rgb(192, 160, 255); /* The outline (grid) color of the calendars */
+  --fc-button-text-color: #d3e01c; /*Font of buttons above calendars*/
+  --fc-today-bg-color: #b98eb1;  /* Color of cell for today's day */
+}
+
 
 body {
   margin: 0;
@@ -35,33 +48,76 @@ body {
   font-size: var(--bs-body-font-size);
   font-weight: var(--bs-body-font-weight);
   line-height: var(--bs-body-line-height);
-  color: rgb(221, 149, 226);  /* Font color for header: Let's start scheming and event text in my-events */
+  color: #AAA1C8; /* Font color for header: Let's start scheming and event text in my-events */
   text-align: center; /* Alignment for headers */
   background-color: #433c5e; /*THIS NEEDS TO BE DARK*/
+
+
+/* BUTTONS! */
+
 
 .btn-outline-light {
   color: rgb(50, 35, 85); 
   background: #b98eb1; 
+  border: 1.5px solid rgb(50, 35, 85); 
   transition: 0.5s color ease;
 }
 
 .btn-outline-light:hover {
   color: #b98eb1; 
   background: #433c5e;
+  border: 1.5px solid #b98eb1;
   text-decoration: none;
 }
 
 .btn-outline-dark {
   color: #b98eb1;
   background: #433c5e;
+  border: 1.5px solid #b98eb1;
   transition: 0.5s color ease;
 }
 
 .btn-outline-dark:hover {
   color: rgb(50, 35, 85); /*THIS NEEDS TO BE DARK*/
-  background: #AAA1C8;
+  background: #b98eb1;
+  border: 1.5px solid rgb(50, 35, 85);
   text-decoration: none;
 }
+
+.nav-link {
+  color: #b98eb1;
+}
+
+.nav-link-dropdown-toggle {
+  color: #b98eb1;
+  background: #433c5e;
+  border: 1.5px solid #b98eb1;
+  transition: 0.5s color ease;
+}
+
+.dropdown-menu {
+  color: #b98eb1;
+  background: #433c5e;
+  border: 1.5px solid #b98eb1;
+  transition: 0.5s color ease;
+}
+
+.dropdown-menu:hover {
+  color: #b98eb1;/*THIS NEEDS TO BE DARK*/
+  background: #b98eb1;
+  border: 1.5px solid #433c5e;
+  text-decoration: none;
+}
+
+.dropdown-menu .dropdown-item {
+  background: #433c5e;  /* Customize this with your desired background color */
+}
+
+.dropdown-menu .dropdown-item:hover {
+  background-color: #b98eb1;/* Customize this with your desired hover background color */
+}
+
+
 
 /* CSS for dashboard and availability */
 
@@ -71,12 +127,13 @@ body {
 }
 
 #available-cal a {
-  color: rgb(192, 160, 255);   /* Font color of calendar month view */
+  color: rgb(192, 160, 255);   /* Font color of month list view */
 }
 
 #calendar .fc-button-primary {            /* Buttons above calendar */
   background-color: rgb(74, 52, 117);
   border: 1px solid rgb(50, 35, 85);
+  transition: 0.5s color ease;
 }
 
 #available-cal .fc-button-primary {       /* Buttons above calendar */
@@ -88,6 +145,7 @@ body {
 #calendar .fc-button-primary:hover {     /* Buttons above calendar when hovered over */
   background-color: rgb(50, 35, 85);
   border: 1px solid rgb(192, 160, 255);
+  
 }
 
 #available-cal .fc-button-primary:hover {  /* Buttons above calendar when hovered over */
@@ -106,34 +164,9 @@ body {
 #available-cal {             /* Calendar sizing */
   max-width: 800px;
   margin: 10px auto;
+  background: rgb(50, 35, 85);
   color: rgb(221, 149, 226) /* Calendar header font color */
 }
 
 
 
-:root {
-  --fc-daygrid-event-dot-width: 8px; /* Day grid dot next to event*/
-  --fc-list-event-dot-width: 8px;     /* Month list dot next to event */
-  --fc-list-event-hover-bg-color: #4d4985; /* Month list date hover */
-  --fc-small-font-size: .85em; /* Font size of event on month calendar */
-  --fc-page-bg-color: #322355; /* Outline of box for multi-day event */
-  --fc-neutral-bg-color: rgb(50, 35, 85); /*Month list background panel for date and day*/
-  --fc-border-color: rgb(192, 160, 255); /* The outline (grid) color of the calendars */
-  --fc-button-text-color: #d3e01c; /*Font of buttons above calendars*/
-  --fc-today-bg-color: rgb(192, 160, 255);  /* Color of cell for today's day */
-  --fc-event-border-color: #c943d6;
-}
-
-.btn-bd-primary {
-  --bs-btn-font-weight: 600;
-  --bs-btn-color: rgb(50, 35, 85);
-  --bs-btn-bg: var(--bd-violet-bg);
-  --bs-btn-border-color: var(--bd-violet-bg);
-  --bs-btn-hover-color: var(--bs-white);
-  --bs-btn-hover-bg: #{shade-color($bd-violet, 10%)};
-  --bs-btn-hover-border-color: #{shade-color($bd-violet, 10%)};
-  --bs-btn-focus-shadow-rgb: var(--bd-violet-rgb);
-  --bs-btn-active-color: var(--bs-btn-hover-color);
-  --bs-btn-active-bg: #{shade-color($bd-violet, 20%)};
-  --bs-btn-active-border-color: #{shade-color($bd-violet, 20%)};
-}

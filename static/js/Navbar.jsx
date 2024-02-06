@@ -25,9 +25,20 @@ function Navbar() {
       <>
       <div style={{ marginTop: '56px' }}>
         <nav className="navbar navbar-expand-lg fixed-top" style={{ backgroundColor: '#433c5e', borderBottom: '1px solid #433c5e' }}>
-          <a className="navbar-brand">
-            {isLoggedIn ? `Logged in as: ${username}` : null}
-          </a>
+          {/* Home Preferences link */}
+          <ul className="navbar-nav">
+                <li className="nav-item">
+                <a className="nav-link" disabled>Logged in as: {username}</a>
+                </li>
+              </ul>
+
+            {/* Home Preferences link */}
+          {/* <ul className="navbar-nav">
+                <li className="nav-item">
+                <a className="nav-link" disabled>{isLoggedIn ? `Logged in as: ${username}` : null}</a>
+                </li>
+              </ul>
+           */}
   
           <button
             data-bs-theme="dark"
@@ -44,10 +55,18 @@ function Navbar() {
   
           <div className="collapse navbar-collapse" id="navbarSupportedContent" data-bs-theme="dark">
             <ul className="navbar-nav me-auto mb-2 mb-lg-2">
+
+              {/* Home Preferences link */}
+              <ul className="navbar-nav mx-auto">
+                <li className="nav-item">
+                <a className="btn btn-outline-dark" href="/dashboard">Dashboard</a>
+                </li>
+              </ul>
+
               {/* My Planner dropdown */}
               <li className="nav-item dropdown">
                 <a
-                  className="nav-link dropdown-toggle"
+                  className="btn btn-outline-dark"
                   href="#"
                   id="navbarDropdown"
                   role="button"
@@ -58,16 +77,16 @@ function Navbar() {
                   My Planner
                 </a>
                 <ul className="dropdown-menu" aria-labelledby="navbarDropdown">
-                  <li><a className="dropdown-item" href="/dashboard">Calendar</a></li>
                   <li><a className="dropdown-item" href="/my-availability">View availability</a></li>
                   <li><a className="dropdown-item" href="/my-events">View my plans</a></li>
                 </ul>
               </li>
+             
   
               {/* Edit Preferences link */}
               <li className="nav-item">
                 {isLoggedIn && userId !== null && (
-                  <a className="nav-link" href={`/edit-user/${userId}`}>
+                  <a className="btn btn-outline-dark" href={`/edit-user/${userId}`}>
                     Edit Preferences
                   </a>
                 )}
@@ -75,7 +94,7 @@ function Navbar() {
   
               {/* Search dropdown */}
               <li className="nav-item dropdown">
-                <a className="nav-link dropdown-toggle"
+                <a className="btn btn-outline-dark"
                   href="#"
                   id="navbarDropdownSearch"
                   role="button"
@@ -92,7 +111,7 @@ function Navbar() {
             </ul>
   
             {/* Logout link */}
-            <ul className="navbar-nav">
+            <ul className="btn btn-outline-dark">
               <li className="nav-item">
                 <a className="nav-link" href="/logout">Logout</a>
               </li>

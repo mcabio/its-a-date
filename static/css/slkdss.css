@@ -1,3 +1,41 @@
+:root {
+  --fc-border-color: #ddd;
+  --fc-border-radius: 3px;
+  --fc-border-width: 1px;
+  --fc-button-background: #f4f4f4;
+  --fc-button-color: #666;
+  --fc-button-hover-background: #e5e5e5;
+  --fc-button-hover-color: #333;
+  --fc-button-disabled-background: #ddd;
+  --fc-button-disabled-color: #aaa;
+  --fc-cell-padding: 4px;
+  --fc-content-padding: 10px;
+  --fc-day-number-color: #888;
+  --fc-day-bg-color: #fff;
+  --fc-event-border-color: #3a87ad;
+  --fc-event-border-radius: 4px;
+  --fc-event-border-width: 1px;
+  --fc-event-bg-color: #3a87ad;
+  --fc-event-color: #fff;
+  --fc-event-title-font-weight: bold;
+  --fc-list-event-hover-bg-color: #f4f4f4;
+  --fc-list-event-hover-color: inherit;
+  --fc-neutral-bg-color: #fff;
+  --fc-popover-arrow-color: #fff;
+  --fc-popover-bg-color: #fff;
+  --fc-popover-border-color: #ddd;
+  --fc-scrollbar-color: #ddd;
+  --fc-scrollbar-hover-color: #aaa;
+  --fc-scrollbar-width: 17px;
+  --fc-slot-bg-color: #f4f4f4;
+  --fc-today-bg-color: #fcf8e3;
+}
+
+
+
+
+
+
 body {
   margin: 0;
   font-family: var(--bs-body-font-family);
