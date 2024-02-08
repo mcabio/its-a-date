@@ -56,6 +56,16 @@ body {
 /* BUTTONS! */
 
 
+.fade-in-color {
+  color: rgb(243, 55, 181);
+  transition: 0.5s color ease;
+}
+
+.fade-in-color:hover {
+  color: #AAA1C8;
+  text-decoration: none;
+}
+
 .btn-outline-light {
   color: rgb(50, 35, 85); 
   background: #b98eb1; 
@@ -144,6 +154,9 @@ body {
   margin-bottom: 5px; 
 }
 
+.nav-item {
+  margin-left: 80px;
+}
 
 .nav-link {
   color: #b98eb1;

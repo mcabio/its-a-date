@@ -27,7 +27,7 @@ function Navbar() {
         <nav className="navbar navbar-expand-lg fixed-top" style={{ backgroundColor: '#433c5e', borderBottom: '1px solid #433c5e' }}>
           {/* Home Preferences link */}
           <ul className="navbar-nav">
-                <li className="nav-item">
+                <li className="nav-button">
                 <a className="nav-link" disabled>Logged in as: {username}</a>
                 </li>
               </ul>
@@ -96,7 +96,6 @@ function Navbar() {
               <li className="nav-item dropdown">
                 <a className="btn btn-outline-dark"
                   href="#"
-                  id="navbarDropdownSearch"
                   role="button"
                   data-bs-toggle="dropdown"
                   aria-haspopup="true"
@@ -112,7 +111,7 @@ function Navbar() {
   
             {/* Logout link */}
             <ul className="btn btn-outline-dark">
-              <li className="nav-item">
+              <li className="nav-button">
                 <a className="nav-link" href="/logout">Logout</a>
               </li>
             </ul>

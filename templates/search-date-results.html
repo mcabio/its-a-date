@@ -6,7 +6,7 @@
     <h1>Search Results</h1>
 
 
-    <div class="d-flex flex-wrap mx-auto">
+    <div class="d-flex flex-wrap justify-content-center mx-auto">
         {% if results %}
             {% set rendered_months = [] %}
 
@@ -29,7 +29,7 @@
                 <div class="row">
                     <div class="col">
                         <div class="collapse multi-collapse" id="multiCollapse{{ event_month }}">
-                            <div class="card card-body">
+                            <div class="card card-body" style="max-width:300px;">
                                 Event: {{ data.title }}<br>
                                 Description: {{ data.description }}<br>
                                 Start Date: {{ data.start_date }}<br>

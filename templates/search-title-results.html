@@ -5,58 +5,45 @@
 {% block body %}
     <h1>Search Results</h1>
 
-
     <div class="list-group">
         {% if results %}
-        {% for data in results %}
-            {% set event_title = data.title %}
-        <a class="list-group-item list-group-item-action" aria-current="true">
-          <div class="d-flex w-100 justify-content-between">
-            <h5 class="mb-1 text-center">{{ event_title }}</h5>
-          </div>
-          <p class="mb-1">Description: {{ data.description }}</p>
-          <small>Start Date: {{ data.start_date }}<br>
-            Start time: {{ data.start_time.strftime('%I:%M %p') }}<br>
-            End Date: {{ data.end_date }}<br>
-            End time: {{ data.end_time.strftime('%I:%M %p') }}<br></small>
+            {% for data in results %}
+                {% set event_title = data.title %}
+                <div class="list-group-item list-group-item-action mb-3" aria-current="true">
+                    <div class="d-flex w-100 justify-content-between">
+                        <h5 class="mb-1 text-center">{{ event_title }}</h5>
+                    </div>
+                    <p class="mb-1">Description: {{ data.description }}</p>
+                    <small>Start Date: {{ data.start_date }}<br>
+                        Start time: {{ data.start_time.strftime('%I:%M %p') }}<br>
+                        End Date: {{ data.end_date }}<br>
+                        End time: {{ data.end_time.strftime('%I:%M %p') }}<br></small>
 
-            <!-- Edit button -->
-            <a class="btn btn-outline-dark" href="/edit-event/{{ data.event_id }}" role="button">Edit</a>
+                    <!-- Edit and Delete buttons -->
+                    <div class="d-flex justify-content-end">
+                        <a class="btn btn-outline-secondary me-2" href="/edit-event/{{ data.event_id }}" role="button" style="width: 100px; margin: 80; margin-left: 10px;"">Edit</a>
+                        <button type="button" class="btn btn-outline-secondary" data-bs-toggle="modal" style="width: 100px; margin: 60; margin-left: 5px;" data-bs-target="#staticBackdrop{{ data.event_id }}">Delete</button>
+                    </div>
+                </div>
 
-            <!-- Delete button trigger modal -->
-            <button type="button" 
-                    class="btn btn-outline-dark"
-                    data-bs-toggle="modal" 
-                    data-bs-target="#staticBackdrop{{ data.event_id }}">Delete
-            </button>
-
-            <!-- Modal -->
-            <div class="modal fade" 
-                 id="staticBackdrop{{ data.event_id }}" 
-                 data-bs-backdrop="static" 
-                 data-bs-keyboard="false" 
-                 tabindex="-1" 
-                 aria-labelledby="staticBackdropLabel{{ data.event_id }}" 
-                 aria-hidden="true">
-                <div class="modal-dialog">
-                    <div class="modal-content">
-                        <div class="modal-header">
-                            <h1 class="modal-title fs-5" 
-                                id="staticBackdropLabel{{ data.event_id }}">You are about to delete an event</h1>
-                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                        </div>
-                        <div class="modal-body">
-                            Do you want to proceed?
-                        </div>
-                        <div class="modal-footer">
-                            <button type="button" class="btn btn-outline-dark" data-bs-dismiss="modal">Cancel</button>
-                            <a type="button" class="btn btn-outline-dark" href="/delete-event/{{ data.event_id }}">Delete</a>
+                <!-- Modal -->
+                <div class="modal fade" id="staticBackdrop{{ data.event_id }}" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel{{ data.event_id }}" aria-hidden="true">
+                    <div class="modal-dialog">
+                        <div class="modal-content">
+                            <div class="modal-header">
+                                <h1 class="modal-title fs-5" id="staticBackdropLabel{{ data.event_id }}">You are about to delete an event</h1>
+                                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                            </div>
+                            <div class="modal-body">
+                                Do you want to proceed?
+                            </div>
+                            <div class="modal-footer">
+                                <button type="button" class="btn btn-outline-dark" data-bs-dismiss="modal">Cancel</button>
+                                <a type="button" class="btn btn-outline-dark" href="/delete-event/{{ data.event_id }}">Delete</a>
+                            </div>
                         </div>
                     </div>
                 </div>
-            </div>
-        </a>
-        
             {% endfor %}
         {% else %}
             <p>{{ no_events_message }}</p>
