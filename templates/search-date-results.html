@@ -5,12 +5,12 @@
 {% block body %}
     <h1>Search Results</h1>
 
-
     <div class="d-flex flex-wrap justify-content-center mx-auto">
         {% if results %}
             {% set rendered_months = [] %}
+            {% set sorted_results = results | sort(attribute='start_date') %}
 
-            {% for data in results %}
+            {% for data in sorted_results %}
                 {% set event_month = data.start_date.strftime('%B') %}
                 {% if event_month not in rendered_months %}
                     <div class="mb-2 me-2" data-bs-theme="dark">
@@ -83,7 +83,6 @@
         {% endif %}
     </div>
 {% endblock %}
-
 
 
 
