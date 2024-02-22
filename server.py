@@ -10,12 +10,13 @@ from datetime import date, datetime, timedelta
 from sqlalchemy import and_, or_
 import crud
 import re
+import os
 
 from jinja2 import StrictUndefined
 
 app = Flask(__name__)
-app.secret_key = 'secretkey'
 app.jinja_env.undefined = StrictUndefined
+app.secret_key = os.environ.get('SECRET_KEY')
 
 # Connect to the database
 connect_to_db(app)
